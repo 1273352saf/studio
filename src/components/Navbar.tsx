@@ -36,30 +36,30 @@ export default function Navbar({ className }: NavbarProps) {
   return (
     <nav
       className={cn(
-        // Dark blue background, white text, padding
-        // Reduced horizontal padding to px-2 and vertical padding to py-1
-        'bg-primary dark:bg-gray-900 text-primary-foreground dark:text-gray-100 px-2 py-1 rounded-md shadow-md',
+        // Reverted padding to px-4 py-2
+        'bg-primary dark:bg-gray-900 text-primary-foreground dark:text-gray-100 px-4 py-2 rounded-md shadow-md',
         className
       )}
       aria-label="Main navigation"
     >
       {/* Use flex container for right-to-left layout */}
-      {/* Reduced spacing to space-x-2 */}
-      <div className="container mx-auto flex justify-end items-center space-x-2 space-x-reverse">
+      {/* Removed container mx-auto, changed justify-end to justify-start */}
+      {/* Reverted spacing to space-x-4 */}
+      <div className="flex justify-start items-center space-x-4 space-x-reverse">
         {/* Render main navigation items */}
         {navItems.map(({ href, label, icon: Icon }) => (
           <Link
             key={href}
             href={href}
             className={cn(
-              // Reduced horizontal padding to px-2, kept vertical padding py-1
-              'flex items-center px-2 py-1 rounded-md text-sm font-medium transition-colors',
+              // Reverted padding to px-3 py-1.5
+              'flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
               // Add active state styling if needed (e.g., based on current path)
               // Example active style: 'bg-destructive text-destructive-foreground'
               href === '/' ? 'bg-destructive text-destructive-foreground' : 'hover:bg-primary/80 dark:hover:bg-gray-700' // Highlight "الرئيسية"
             )}
           >
-             <Icon className="h-4 w-4 ml-1" /> {/* Reduced margin to ml-1 in RTL */}
+             <Icon className="h-4 w-4 ml-1" /> {/* Keep reduced margin */}
              {label}
           </Link>
         ))}
@@ -69,8 +69,8 @@ export default function Navbar({ className }: NavbarProps) {
             <DropdownMenuTrigger asChild>
                 <Button
                    variant="ghost" // Make trigger look like other nav items
-                   // Reduced horizontal padding to px-2, kept vertical padding py-1
-                   className="flex items-center px-2 py-1 rounded-md text-sm font-medium text-primary-foreground dark:text-gray-100 hover:bg-primary/80 dark:hover:bg-gray-700"
+                   // Reverted padding to px-3 py-1.5
+                   className="flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-primary-foreground dark:text-gray-100 hover:bg-primary/80 dark:hover:bg-gray-700"
                 >
                     <MoreHorizontal className="h-4 w-4 ml-1" /> {/* More icon */}
                     المزيد

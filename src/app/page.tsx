@@ -21,7 +21,7 @@ export default async function Home() {
   // Fetch initial articles for the 'local' category on the server
   const initialArticles = await getNewsArticles('', 'local'); // Fetch 'local' articles initially
 
-  // Extract potential image URLs for the slider
+  // Extract potential image URLs for the slider, add placeholders, and AI-generated placeholders
   const imageUrls = initialArticles
      .map(article => article.imageUrl)
      .filter((url): url is string => !!url) // Ensure only defined URLs are included
@@ -30,6 +30,12 @@ export default async function Home() {
          'https://picsum.photos/600/400?random=9',
          'https://picsum.photos/600/400?random=10',
          'https://picsum.photos/600/400?random=11',
+         // Add 5 AI placeholder images (using picsum for now)
+         'https://picsum.photos/600/400?random=12', // AI Image 1
+         'https://picsum.photos/600/400?random=13', // AI Image 2
+         'https://picsum.photos/600/400?random=14', // AI Image 3
+         'https://picsum.photos/600/400?random=15', // AI Image 4
+         'https://picsum.photos/600/400?random=16', // AI Image 5
       ])
       // Ensure unique URLs if placeholders might repeat
      .filter((url, index, self) => self.indexOf(url) === index);
@@ -83,6 +89,7 @@ export default async function Home() {
            {/* Adjusted height classes for better scaling */}
            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-[30vh] md:h-[40vh] lg:h-[50vh] mb-6">
              <div className="md:col-span-2 h-full">
+               {/* Pass images to the slider */}
                <ImageSlider images={imageUrls} className="h-full" />
              </div>
              <div className="md:col-span-1 h-full">

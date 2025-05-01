@@ -16,8 +16,34 @@ interface NewsSectionProps {
   initialArticles: NewsArticle[];
 }
 
-// Define categories
-type NewsCategory = 'local' | 'governorate' | 'world';
+// Define categories - added 'sohag'
+type NewsCategory = 'local' | 'sohag' | 'governorate' | 'world'; // Added 'sohag'
+
+// Helper to map display category to API category
+const getApiCategory = (category: NewsCategory): 'local' | 'governorate' | 'world' => {
+  if (category === 'sohag') {
+    return 'governorate'; // Map 'sohag' to 'governorate' for the API call
+  }
+   if (category === 'governorate') {
+    return 'governorate';
+  }
+   if (category === 'world') {
+      return 'world';
+   }
+  return 'local'; // Default to 'local'
+};
+
+// Helper to get display name for category
+const getCategoryDisplayName = (category: NewsCategory): string => {
+  switch (category) {
+    case 'local': return 'محلية';
+    case 'sohag': return 'سوهاج';
+    case 'governorate': return 'محافظات';
+    case 'world': return 'عالمية'; // Keep world for message consistency if needed elsewhere
+    default: return 'أخبار';
+  }
+}
+
 
 export default function NewsSection({ initialArticles }: NewsSectionProps) {
   const [articles, setArticles] = useState<NewsArticle[]>(initialArticles);
@@ -25,12 +51,15 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<NewsCategory>('local'); // Default to 'local'
 
-  // Function to fetch articles based on search term and category
-  const fetchArticles = async (term: string, category: NewsCategory) => {
+  // Function to fetch articles based on search term and selected display category
+  const fetchArticles = async (term: string, displayCategory: NewsCategory) => {
     setIsLoading(true);
+    const apiCategory = getApiCategory(displayCategory); // Map display category to API category
     try {
-      console.log(`Fetching articles for: term="${term}", category="${category}"`); // Log fetching parameters
-      const fetchedArticles = await getNewsArticles(term, category);
+      console.log(`Fetching articles for: term="${term}", category="${apiCategory}" (Display: ${displayCategory})`); // Log fetching parameters
+      const fetchedArticles = await getNewsArticles(term, apiCategory);
+      // Filter further if needed, e.g., if API returns all governorates for 'sohag'
+      // For now, assume API handles it or display all governorate news under 'sohag' tab
       setArticles(fetchedArticles);
     } catch (error) {
       console.error("Error fetching articles:", error);
@@ -50,7 +79,6 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
   const handleSearchSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // Fetching is already handled by the useEffect hook when searchTerm changes
-    // No need to call fetchArticles here directly unless debouncing is added
   };
 
   // Handle tab change
@@ -78,16 +106,19 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
       </form>
 
       {/* News Categories Tabs and Heading */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-4">
-        <h2 className="bg-primary text-primary-foreground font-semibold text-lg flex-shrink-0 px-4 py-2 rounded-md flex items-center gap-2 order-1 sm:order-none">
+      {/* Changed layout: Heading first, then Tabs, using flex and gap */}
+      <div className="flex items-center gap-4 mb-4">
+        <h2 className="bg-primary text-primary-foreground font-semibold text-lg flex-shrink-0 px-4 py-2 rounded-md flex items-center gap-2">
           <Newspaper className="h-5 w-5" />
           أحدث الأخبار
         </h2>
-        <Tabs defaultValue={selectedCategory} onValueChange={handleTabChange} className="w-full sm:w-auto order-2 sm:order-none">
-          <TabsList className="grid w-full grid-cols-3 sm:w-auto">
+        <Tabs defaultValue={selectedCategory} onValueChange={handleTabChange} className="w-auto"> {/* Removed w-full */}
+           {/* Changed grid-cols-3 to grid-flow-col for dynamic width */}
+          <TabsList className="grid grid-flow-col auto-cols-max"> {/* Adjust grid for content size */}
             <TabsTrigger value="local">محلية</TabsTrigger>
+            <TabsTrigger value="sohag">سوهاج</TabsTrigger> {/* New Sohag Tab */}
             <TabsTrigger value="governorate">محافظات</TabsTrigger>
-            <TabsTrigger value="world">عالمية</TabsTrigger>
+             {/* Removed world tab as per request */}
           </TabsList>
         </Tabs>
       </div>
@@ -96,7 +127,7 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
       {isLoading ? (
         // Skeleton loading state
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, index) => ( // Reduced skeleton count slightly
+          {[...Array(6)].map((_, index) => (
             <Skeleton key={index} className="h-64 w-full rounded-lg" />
           ))}
         </div>
@@ -104,19 +135,19 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
         // Display articles
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
           {articles.map((article, index) => (
-            <ArticleCard key={`${selectedCategory}-${article.url}-${index}`} article={article} /> // Add category to key for potential re-renders
+             // Use display category in key
+            <ArticleCard key={`${selectedCategory}-${article.url}-${index}`} article={article} />
           ))}
         </div>
       ) : (
-        // No articles found message
+        // No articles found message - Updated text
         <p className="text-center text-muted-foreground col-span-full py-10">
           {searchTerm
-             ? `لم يتم العثور على مقالات تطابق بحثك "${searchTerm}" في قسم ${selectedCategory === 'local' ? 'محلية' : selectedCategory === 'governorate' ? 'محافظات' : 'عالمية'}.`
-             : `لا توجد مقالات متاحة حاليًا في قسم ${selectedCategory === 'local' ? 'محلية' : selectedCategory === 'governorate' ? 'محافظات' : 'عالمية'}.`
+             ? `لم يتم العثور على مقالات تطابق بحثك "${searchTerm}" في قسم ${getCategoryDisplayName(selectedCategory)}.`
+             : `لا توجد مقالات متاحة حاليًا في قسم ${getCategoryDisplayName(selectedCategory)}.`
            }
         </p>
       )}
     </div>
   );
 }
-

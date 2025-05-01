@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Calendar, CircleDollarSign, Home } from 'lucide-react';
@@ -17,7 +18,7 @@ import {
 } from '@/components/ui/sidebar';
 import { Calendar as ShadCalendar } from '@/components/ui/calendar'; // Alias import
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button'; // Import buttonVariants
 import { cn } from '@/lib/utils';
 
 const CurrencyRates = () => {
@@ -85,7 +86,7 @@ export default function AppSidebar({ className }: AppSidebarProps) {
            <SidebarGroupLabel>التقويم</SidebarGroupLabel>
            {/* Apply flex styles for centering icon when collapsed */}
            <SidebarGroupContent className={cn(
-                'transition-all duration-300', // Smooth transition
+                'transition-all duration-300 relative', // Added relative positioning for centering icon
                 state === 'collapsed'
                   ? 'flex justify-center items-center h-10 opacity-0 pointer-events-none' // Icon centered, hidden when collapsed
                   : 'opacity-100' // Visible when expanded
@@ -97,9 +98,21 @@ export default function AppSidebar({ className }: AppSidebarProps) {
                    mode="single"
                    selected={date}
                    onSelect={setDate}
-                   // Removed p-0 to allow default padding, potentially fixing button issue
-                   className="rounded-md border"
                    dir="rtl" // Explicitly set direction for calendar
+                   // Customize appearance for sidebar: reduce padding, make cells smaller
+                   className="rounded-md border p-1 w-full" // Ensure it takes container width, smaller overall padding
+                   classNames={{
+                     caption_label: "text-xs", // Smaller caption label
+                     head_cell: "text-muted-foreground rounded-md w-7 font-normal text-[0.7rem]", // Smaller head cells
+                     cell: "h-7 w-7 text-center text-xs p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20", // Smaller day cells
+                     day: cn(buttonVariants({ variant: "ghost" }), "h-7 w-7 p-0 font-normal aria-selected:opacity-100 text-xs"), // Smaller day button
+                     day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                     day_today: "bg-accent text-accent-foreground",
+                     day_outside: "text-muted-foreground opacity-50",
+                     nav_button: cn(buttonVariants({ variant: "outline" }), "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100"), // Smaller nav buttons
+                     nav_button_previous: "absolute left-1", // Adjusted position
+                     nav_button_next: "absolute right-1", // Adjusted position
+                   }}
                  />
                </div>
                {/* Button with icon, only visible when collapsed */}
@@ -123,7 +136,7 @@ export default function AppSidebar({ className }: AppSidebarProps) {
          <SidebarGroup className="mt-4">
            <SidebarGroupLabel>أسعار العملات</SidebarGroupLabel>
             <SidebarGroupContent className={cn(
-               'transition-opacity duration-300',
+               'transition-opacity duration-300 relative', // Added relative positioning
                state === 'collapsed'
                   ? 'flex justify-center items-center h-10 opacity-0 pointer-events-none' // Icon centered, hidden when collapsed
                   : 'opacity-100' // Visible when expanded
@@ -156,3 +169,4 @@ export default function AppSidebar({ className }: AppSidebarProps) {
     </Sidebar>
   );
 }
+

@@ -1,68 +1,65 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import type { NewsArticle } from '@/services/news';
-import SearchInput from '@/components/SearchInput';
 import ArticleCard from '@/components/ArticleCard';
 import { Skeleton } from '@/components/ui/skeleton';
+import BreakingNewsBar from '@/components/BreakingNewsBar'; // Import new component
+import ImageSlider from '@/components/ImageSlider'; // Import new component
+import { Newspaper } from 'lucide-react'; // Import icon for title
 
 interface NewsSectionProps {
   initialArticles: NewsArticle[];
+  imageUrls: string[]; // Add prop for image URLs
+  latestArticle?: NewsArticle; // Add prop for the latest article
 }
 
-export default function NewsSection({ initialArticles }: NewsSectionProps) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filteredArticles, setFilteredArticles] = useState<NewsArticle[]>(initialArticles);
-  const [isLoading, setIsLoading] = useState(true); // Start loading initially
+export default function NewsSection({ initialArticles, imageUrls, latestArticle }: NewsSectionProps) {
+  // Remove search-related state and effects
+  const [articles, setArticles] = useState<NewsArticle[]>(initialArticles);
+  const [isLoading, setIsLoading] = useState(false); // No initial loading needed if data is passed directly
 
-  // Debounce effect for search
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setIsLoading(true); // Set loading before filtering
-      const lowerCaseQuery = searchQuery.toLowerCase();
-      const results = initialArticles.filter(
-        article =>
-          article.title.toLowerCase().includes(lowerCaseQuery) ||
-          article.summary.toLowerCase().includes(lowerCaseQuery) ||
-          article.source.toLowerCase().includes(lowerCaseQuery)
-      );
-      setFilteredArticles(results);
-      // Simulate loading time for visual feedback, remove in production
-      setTimeout(() => setIsLoading(false), 300);
-    }, 300); // Debounce time: 300ms
+  // If filtering logic is ever needed again, it can be re-added here.
+  // For now, we just display the initial articles.
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [searchQuery, initialArticles]);
+  // Remove the useEffect for debounced search filtering
 
-  // Set initial loading state to false after mount
-  useEffect(() => {
-     setIsLoading(false);
-  }, []);
+  // Remove initial loading effect if data is always present
+  // useEffect(() => {
+  //    setIsLoading(false);
+  // }, []);
 
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
-  };
+  // Remove handleSearchChange function
 
   return (
     <section className="space-y-6">
-      <SearchInput value={searchQuery} onChange={handleSearchChange} />
+       {/* Add the App Title here */}
+       <div className="mb-8 flex items-center gap-3">
+         <Newspaper className="h-8 w-8 text-primary" />
+         <h1 className="text-3xl font-bold text-primary">NewsFlash</h1>
+       </div>
 
+      {/* Add BreakingNewsBar */}
+      <BreakingNewsBar latestArticleTitle={latestArticle?.title} />
+
+      {/* Add ImageSlider */}
+      <ImageSlider images={imageUrls} />
+
+      {/* Keep the article grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, index) => (
              <Skeleton key={index} className="h-48 rounded-lg" />
           ))}
         </div>
-      ) : filteredArticles.length > 0 ? (
+      ) : articles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredArticles.map((article, index) => (
+          {articles.map((article, index) => (
             <ArticleCard key={`${article.url}-${index}`} article={article} />
           ))}
         </div>
       ) : (
-        <p className="text-center text-muted-foreground py-8">No articles found matching your search.</p>
+        <p className="text-center text-muted-foreground py-8">No articles available.</p> // Updated message
       )}
     </section>
   );

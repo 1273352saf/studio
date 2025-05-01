@@ -7,14 +7,25 @@ export default async function Home() {
   // In a real app, you might pass initial search params here
   const initialArticles = await getNewsArticles('');
 
+  // Extract potential image URLs for the slider (using placeholders for now)
+  const imageUrls = [
+    'https://picsum.photos/800/400?random=1',
+    'https://picsum.photos/800/400?random=2',
+    'https://picsum.photos/800/400?random=3',
+    'https://picsum.photos/800/400?random=4',
+    'https://picsum.photos/800/400?random=5',
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <header className="mb-8 flex items-center gap-3">
-        <Newspaper className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold text-primary">NewsFlash</h1>
-      </header>
+      {/* Header removed, title moved potentially to BreakingNewsBar or NewsSection */}
       <main>
-        <NewsSection initialArticles={initialArticles} />
+        {/* Pass image URLs and potentially the latest article to NewsSection */}
+        <NewsSection
+          initialArticles={initialArticles}
+          imageUrls={imageUrls}
+          latestArticle={initialArticles[0]} // Pass the first article as the "latest"
+        />
       </main>
       <footer className="mt-12 text-center text-muted-foreground text-sm">
         Powered by Firebase Studio & Genkit

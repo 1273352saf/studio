@@ -68,6 +68,27 @@ export async function getNewsArticles(keywords: string): Promise<NewsArticle[]> 
       source: 'Financial Times',
       url: 'https://example.com/article5',
        imageUrl: 'https://picsum.photos/600/300?random=5' // Placeholder image
+    },
+    {
+      title: 'New Space Mission Launched Successfully',
+      summary: 'The national space agency confirmed the successful launch of its latest mission aimed at exploring Mars\' atmosphere. The probe is expected to reach the red planet in 9 months.',
+      source: 'Space Agency Press',
+      url: 'https://example.com/article6',
+      imageUrl: 'https://picsum.photos/600/300?random=6' // Placeholder image
+    },
+    {
+      title: 'International Film Festival Announces Award Winners',
+      summary: 'The prestigious international film festival concluded last night, announcing the winners across various categories. The top prize went to a compelling drama from an independent filmmaker.',
+      source: 'Entertainment Weekly',
+      url: 'https://example.com/article7',
+      imageUrl: 'https://picsum.photos/600/300?random=7' // Placeholder image
+    },
+    {
+        title: 'Culinary World Celebrates New Michelin Star Restaurants',
+        summary: 'The annual Michelin Guide release has honored several new restaurants with coveted stars, highlighting innovation and excellence in gastronomy.',
+        source: 'Food & Wine Magazine',
+        url: 'https://example.com/article8',
+        imageUrl: 'https://picsum.photos/600/300?random=8' // Placeholder image
     }
   ];
 }

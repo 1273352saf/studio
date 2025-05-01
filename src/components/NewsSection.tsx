@@ -1,35 +1,46 @@
+// NewsSection.tsx
 'use client';
 
 import { useState } from 'react';
 import type { NewsArticle } from '@/services/news';
 import ArticleCard from '@/components/ArticleCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import BreakingNewsBar from '@/components/BreakingNewsBar'; // Import new component
-import ImageSlider from '@/components/ImageSlider'; // Import new component
-// Removed Newspaper import
+import BreakingNewsBar from '@/components/BreakingNewsBar';
+import ImageSlider from '@/components/ImageSlider';
+import { Card } from '@/components/ui/card'; // Import Card
+import { Video } from 'lucide-react'; // Import Video icon
 
 interface NewsSectionProps {
   initialArticles: NewsArticle[];
   imageUrls: string[];
-  breakingNewsItems: string[]; // Changed from latestArticle to breakingNewsItems
+  breakingNewsItems: string[];
 }
 
 export default function NewsSection({ initialArticles, imageUrls, breakingNewsItems }: NewsSectionProps) {
-  // Keep state for articles and loading, but remove search functionality
   const [articles] = useState<NewsArticle[]>(initialArticles);
   const [isLoading] = useState(false); // Data is loaded server-side
 
   return (
     <section className="space-y-6">
-      {/* Removed the App Title and Newspaper icon here */}
-
-      {/* Add BreakingNewsBar with static items */}
+      {/* Breaking News Bar */}
       <BreakingNewsBar newsItems={breakingNewsItems} />
 
-      {/* Add ImageSlider */}
-      <ImageSlider images={imageUrls} />
+      {/* Image Slider and Live Stream Area */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch"> {/* Use grid and items-stretch */}
+        <div className="lg:col-span-2 h-full"> {/* Slider takes 2/3 width on large screens */}
+          <ImageSlider images={imageUrls} className="h-64 lg:h-full" /> {/* Add specific height */}
+        </div>
+        <div className="lg:col-span-1 h-full"> {/* Live stream takes 1/3 width, ensure full height */}
+           {/* Placeholder for live stream */}
+           <Card className="h-full flex flex-col items-center justify-center bg-muted text-muted-foreground p-4 min-h-[200px] lg:min-h-[200px]"> {/* Ensure min-height */}
+             <Video className="h-12 w-12 mx-auto mb-2 text-foreground" />
+             <p className="font-semibold">مساحة البث المباشر</p>
+             <p className="text-sm text-center mt-1">سيتم إضافة البث المباشر هنا قريبًا.</p>
+           </Card>
+        </div>
+      </div>
 
-      {/* Keep the article grid */}
+      {/* Article Grid */}
       {isLoading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, index) => (
@@ -43,7 +54,7 @@ export default function NewsSection({ initialArticles, imageUrls, breakingNewsIt
           ))}
         </div>
       ) : (
-        <p className="text-center text-muted-foreground py-8">لا توجد مقالات متاحة.</p> // Updated message in Arabic
+        <p className="text-center text-muted-foreground py-8">لا توجد مقالات متاحة.</p>
       )}
     </section>
   );

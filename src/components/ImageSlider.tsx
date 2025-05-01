@@ -2,38 +2,36 @@
 
 import Image from 'next/image';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area"; // Use ShadCN ScrollArea
+import { cn } from '@/lib/utils'; // Import cn for conditional classes
 
 interface ImageSliderProps {
   images: string[];
+  className?: string; // Allow passing className
 }
 
-export default function ImageSlider({ images }: ImageSliderProps) {
+export default function ImageSlider({ images, className }: ImageSliderProps) {
   if (!images || images.length === 0) {
     return null; // Don't render anything if there are no images
   }
 
   return (
-    <div className="relative w-full">
-       <ScrollArea className="w-full whitespace-nowrap rounded-md border">
-         <div className="flex w-max space-x-4 p-4">
+    <div className={cn("relative w-full h-full", className)}> {/* Apply className */}
+       <ScrollArea className="w-full h-full whitespace-nowrap rounded-md border">
+         <div className="flex w-max space-x-4 p-4 h-full">
            {images.map((src, index) => (
-             <figure key={index} className="shrink-0">
-               <div className="overflow-hidden rounded-md">
+             <figure key={index} className="shrink-0 relative w-64 sm:w-80 md:w-96 h-full"> {/* Use relative, set base width and height */}
+               <div className="overflow-hidden rounded-md h-full">
                  <Image
                    src={src}
                    alt={`Featured image ${index + 1}`}
-                   // Using fixed dimensions for consistency in the slider
-                   width={600}
-                   height={300}
-                   className="aspect-[2/1] h-fit w-full object-cover" // Maintain aspect ratio
+                   // Use layout="fill" and objectFit="cover" for responsive image filling
+                   layout="fill"
+                   objectFit="cover"
+                   className="rounded-md" // Keep rounded corners if desired
                    priority={index < 2} // Prioritize loading first couple of images
                    data-ai-hint="news landscape" // Add AI hint for image search
                  />
                </div>
-                {/* Optional: Add caption */}
-               {/* <figcaption className="pt-2 text-xs text-muted-foreground">
-                 Caption for image {index + 1}
-               </figcaption> */}
              </figure>
            ))}
          </div>

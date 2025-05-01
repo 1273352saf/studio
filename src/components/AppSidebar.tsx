@@ -83,38 +83,67 @@ export default function AppSidebar({ className }: AppSidebarProps) {
          {/* Calendar Section */}
          <SidebarGroup className="mt-4">
            <SidebarGroupLabel>التقويم</SidebarGroupLabel>
-           {/* Added w-full when expanded, ensured flexbox settings for collapsed icon */}
-           <SidebarGroupContent className={cn(state === 'collapsed' ? 'flex justify-center items-center h-full' : 'w-full')}>
-             {/* Show only icon when collapsed */}
-             {state === 'collapsed' ? (
-               <Button variant="ghost" size="icon" onClick={toggleSidebar}>
+           {/* Apply flex styles for centering icon when collapsed */}
+           <SidebarGroupContent className={cn(
+                'transition-all duration-300', // Smooth transition
+                state === 'collapsed'
+                  ? 'flex justify-center items-center h-10 opacity-0 pointer-events-none' // Icon centered, hidden when collapsed
+                  : 'opacity-100' // Visible when expanded
+              )}>
+               {/* Calendar container ensures it takes width, only visible when expanded */}
+               <div className={cn(state === 'expanded' ? 'block' : 'hidden')}>
+                 <ShadCalendar
+                   mode="single"
+                   selected={date}
+                   onSelect={setDate}
+                   // Ensure calendar takes full width of its container and adds padding
+                   className="rounded-md border w-full p-0" // p-0 to avoid double padding with internal DayPicker padding
+                   dir="rtl" // Explicitly set direction for calendar
+                 />
+               </div>
+               {/* Button with icon, only visible when collapsed */}
+               <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleSidebar}
+                  className={cn(
+                    'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300', // Center icon
+                    state === 'collapsed' ? 'opacity-100' : 'opacity-0 pointer-events-none' // Show only when collapsed
+                  )}
+                  aria-label="Show Calendar" // Accessibility label
+                >
                   <Calendar className="h-5 w-5" />
-                </Button>
-             ) : (
-               <ShadCalendar
-                 mode="single"
-                 selected={date}
-                 onSelect={setDate}
-                 // Ensure calendar takes full width of its container
-                 className="rounded-md border w-full"
-                 dir="rtl" // Explicitly set direction for calendar
-               />
-             )}
+               </Button>
            </SidebarGroupContent>
          </SidebarGroup>
+
 
          {/* Currency Rates Section */}
          <SidebarGroup className="mt-4">
            <SidebarGroupLabel>أسعار العملات</SidebarGroupLabel>
-            <SidebarGroupContent className={cn(state === 'collapsed' && 'flex justify-center items-center h-full')}>
-              {/* Show only icon when collapsed */}
-              {state === 'collapsed' ? (
-                 <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-                    <CircleDollarSign className="h-5 w-5" />
-                  </Button>
-              ) : (
-                <CurrencyRates />
-              )}
+            <SidebarGroupContent className={cn(
+               'transition-opacity duration-300',
+               state === 'collapsed'
+                  ? 'flex justify-center items-center h-10 opacity-0 pointer-events-none' // Icon centered, hidden when collapsed
+                  : 'opacity-100' // Visible when expanded
+            )}>
+              {/* Currency rates content, only visible when expanded */}
+               <div className={cn(state === 'expanded' ? 'block' : 'hidden')}>
+                 <CurrencyRates />
+               </div>
+               {/* Button with icon, only visible when collapsed */}
+               <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleSidebar}
+                   className={cn(
+                     'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300', // Center icon
+                     state === 'collapsed' ? 'opacity-100' : 'opacity-0 pointer-events-none' // Show only when collapsed
+                   )}
+                  aria-label="Show Currency Rates" // Accessibility label
+                >
+                  <CircleDollarSign className="h-5 w-5" />
+                </Button>
             </SidebarGroupContent>
          </SidebarGroup>
       </SidebarContent>

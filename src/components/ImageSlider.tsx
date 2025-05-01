@@ -29,7 +29,9 @@ export default function ImageSlider({ images, className }: ImageSliderProps) {
                    objectFit="cover"
                    className="rounded-md" // Keep rounded corners if desired
                    priority={index < 2} // Prioritize loading first couple of images
-                   data-ai-hint="news landscape" // Add AI hint for image search
+                   // Add specific hint if it's the provided image, otherwise use generic
+                   data-ai-hint={src.includes('wikimedia') ? 'basketball players action' : 'news landscape'}
+                   unoptimized={src.includes('wikimedia')} // Add unoptimized prop for external domains not in next.config.js
                  />
                </div>
              </figure>

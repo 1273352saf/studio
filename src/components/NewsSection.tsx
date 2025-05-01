@@ -1,61 +1,101 @@
-// NewsSection.tsx
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { NewsArticle } from '@/services/news';
+import { getNewsArticles } from '@/services/news'; // Import the function
 import ArticleCard from '@/components/ArticleCard';
-import { Skeleton } from '@/components/ui/skeleton';
-import BreakingNewsBar from '@/components/BreakingNewsBar';
 import ImageSlider from '@/components/ImageSlider';
-import { Card } from '@/components/ui/card'; // Import Card
-import { Video } from 'lucide-react'; // Import Video icon
+import BreakingNewsBar from '@/components/BreakingNewsBar';
+import { Skeleton } from '@/components/ui/skeleton'; // For loading states
+import { Input } from '@/components/ui/input'; // Import Input
+import { Button } from '@/components/ui/button'; // Import Button
+import { Search } from 'lucide-react'; // Import Search icon
 
 interface NewsSectionProps {
   initialArticles: NewsArticle[];
-  imageUrls: string[];
-  breakingNewsItems: string[];
+  imageUrls: string[]; // Receive image URLs as props
+  breakingNewsItems: string[]; // Receive breaking news items
 }
 
+// Placeholder for Live Stream component
+const LiveStreamPlaceholder = () => (
+  <div className="bg-card border rounded-lg shadow-sm h-full flex items-center justify-center text-muted-foreground">
+    <p>بث مباشر (قريبا)</p>
+  </div>
+);
+
 export default function NewsSection({ initialArticles, imageUrls, breakingNewsItems }: NewsSectionProps) {
-  const [articles] = useState<NewsArticle[]>(initialArticles);
-  const [isLoading] = useState(false); // Data is loaded server-side
+  const [articles, setArticles] = useState<NewsArticle[]>(initialArticles);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Function to fetch articles based on search term
+  const handleSearch = async (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault(); // Prevent default form submission if used
+    setIsLoading(true);
+    try {
+      const fetchedArticles = await getNewsArticles(searchTerm);
+      setArticles(fetchedArticles);
+    } catch (error) {
+      console.error("Error fetching articles:", error);
+      // Handle error state, maybe show a toast notification
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <section className="space-y-6">
-      {/* Breaking News Bar */}
-      <BreakingNewsBar newsItems={breakingNewsItems} />
+    <div className="space-y-6">
+       {/* Search Bar */}
+       <form onSubmit={handleSearch} className="flex gap-2 mb-6">
+         <Input
+           type="search"
+           placeholder="ابحث عن أخبار..."
+           value={searchTerm}
+           onChange={(e) => setSearchTerm(e.target.value)}
+           className="flex-grow"
+           aria-label="بحث الأخبار"
+         />
+         <Button type="submit" disabled={isLoading}>
+           {isLoading ? 'جار البحث...' : <Search className="h-4 w-4" />}
+         </Button>
+       </form>
 
-      {/* Image Slider and Live Stream Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch h-80"> {/* Use grid, items-stretch and set a fixed height */}
-        <div className="lg:col-span-2 h-full"> {/* Slider takes 2/3 width on large screens */}
-          <ImageSlider images={imageUrls} className="h-full" /> {/* Ensure slider takes full height */}
+       {/* Breaking News Bar */}
+       <BreakingNewsBar newsItems={breakingNewsItems} />
+
+      {/* Top section with Slider and Live Stream */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-64 md:h-80 lg:h-96"> {/* Adjust height as needed */}
+        <div className="md:col-span-2 h-full">
+          <ImageSlider images={imageUrls} className="h-full" />
         </div>
-        <div className="lg:col-span-1 h-full"> {/* Live stream takes 1/3 width, ensure full height */}
-           {/* Placeholder for live stream */}
-           <Card className="h-full flex flex-col items-center justify-center bg-muted text-muted-foreground p-4"> {/* Ensure Card takes full height */}
-             <Video className="h-12 w-12 mx-auto mb-2 text-foreground" />
-             <p className="font-semibold">مساحة البث المباشر</p>
-             <p className="text-sm text-center mt-1">سيتم إضافة البث المباشر هنا قريبًا.</p>
-           </Card>
+        <div className="md:col-span-1 h-full">
+          <LiveStreamPlaceholder />
         </div>
       </div>
 
-      {/* Article Grid */}
+      {/* Articles Grid */}
+      <h2 className="text-2xl font-semibold border-b pb-2 mb-4">أحدث الأخبار</h2>
       {isLoading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, index) => (
-             <Skeleton key={index} className="h-48 rounded-lg" />
-          ))}
-        </div>
+         // Skeleton loading state
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+           {[...Array(8)].map((_, index) => (
+             <Skeleton key={index} className="h-64 w-full rounded-lg" />
+           ))}
+         </div>
       ) : articles.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {articles.map((article, index) => (
-            <ArticleCard key={`${article.url}-${index}`} article={article} />
-          ))}
-        </div>
-      ) : (
-        <p className="text-center text-muted-foreground py-8">لا توجد مقالات متاحة.</p>
+         // Display articles
+         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+           {articles.map((article, index) => (
+             <ArticleCard key={index} article={article} />
+           ))}
+         </div>
+       ) : (
+         // No articles found message
+         <p className="text-center text-muted-foreground col-span-full">
+            لم يتم العثور على مقالات تطابق بحثك.
+         </p>
       )}
-    </section>
+    </div>
   );
 }

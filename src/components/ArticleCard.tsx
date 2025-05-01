@@ -52,7 +52,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
         setSentimentData(result);
       } catch (err) {
         console.error("Error fetching sentiment:", err);
-        setError("Could not load sentiment.");
+        setError("تعذر تحميل التحليل."); // Translate error message
       } finally {
         setIsLoadingSentiment(false);
       }
@@ -85,7 +85,7 @@ export default function ArticleCard({ article }: ArticleCardProps) {
                 title={sentimentData.reasoning}
               >
                 <SentimentIcon sentiment={sentimentData.sentiment} />
-                {sentimentData.sentiment.charAt(0).toUpperCase() + sentimentData.sentiment.slice(1)}
+                {sentimentData.sentiment === 'positive' ? 'إيجابي' : sentimentData.sentiment === 'negative' ? 'سلبي' : 'محايد'} {/* Translate sentiment */}
                  ({sentimentData.score.toFixed(2)})
               </Badge>
             ) : null}
@@ -96,9 +96,10 @@ export default function ArticleCard({ article }: ArticleCardProps) {
           target="_blank"
           rel="noopener noreferrer"
           className="text-accent hover:underline inline-flex items-center gap-1 text-sm"
-          aria-label={`Read full article: ${article.title}`}
+          aria-label={`قراءة المقال كاملاً: ${article.title}`} // Translate aria-label
         >
-          Read More <ExternalLink className="h-3 w-3" />
+          اقرأ المزيد {/* Translate "Read More" */}
+          <ExternalLink className="h-3 w-3 ms-1" /> {/* Add margin start (ms-1) for RTL */}
         </a>
       </CardFooter>
     </Card>

@@ -6,6 +6,23 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Add marquee animation keyframes */
+@keyframes marquee-rtl {
+  0% { transform: translateX(0%); } /* Start fully visible on the right */
+  100% { transform: translateX(-100%); } /* Move completely off to the left */
+}
+
+.animate-marquee-rtl {
+  /* Using inline-block or block might be necessary depending on context */
+  display: inline-block;
+  /* Ensure text doesn't wrap */
+  white-space: nowrap;
+  /* Apply the animation */
+  animation: marquee-rtl 20s linear infinite; /* Adjust duration (e.g., 20s) */
+  will-change: transform; /* Optimize animation performance */
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 98%; /* Light Gray */

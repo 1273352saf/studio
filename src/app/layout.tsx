@@ -6,8 +6,8 @@ import { Toaster } from "@/components/ui/toaster" // Import Toaster
 const inter = Inter({ subsets: ['latin'] }) // Initialize Inter font
 
 export const metadata: Metadata = {
-  title: 'NewsFlash', // Update title
-  description: 'Your daily dose of news with sentiment analysis.', // Update description
+  title: 'الكوله اليوم', // Update title
+  description: 'موقع اخبارى تجريبي.', // Update description
 };
 
 export default function RootLayout({
@@ -16,7 +16,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ar" dir="rtl"> {/* Set lang to "ar" and dir to "rtl" */}
       <body className={`${inter.className} antialiased`}> {/* Use Inter font class */}
         {children}
         <Toaster /> {/* Add Toaster here */}

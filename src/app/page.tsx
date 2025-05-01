@@ -1,6 +1,7 @@
-import { Newspaper } from 'lucide-react';
+import { Facebook, Twitter, Instagram } from 'lucide-react';
 import { getNewsArticles, type NewsArticle } from '@/services/news';
 import NewsSection from '@/components/NewsSection';
+import { Button } from '@/components/ui/button'; // Import Button for icons
 
 export default async function Home() {
   // Fetch initial articles on the server
@@ -8,23 +9,51 @@ export default async function Home() {
   const initialArticles = await getNewsArticles('');
 
   // Extract potential image URLs for the slider (using placeholders for now)
-  const imageUrls = [
-    'https://picsum.photos/800/400?random=1',
-    'https://picsum.photos/800/400?random=2',
-    'https://picsum.photos/800/400?random=3',
-    'https://picsum.photos/800/400?random=4',
-    'https://picsum.photos/800/400?random=5',
+   // Filter out articles without imageUrls and map to get the URLs
+   const imageUrls = initialArticles
+     .map(article => article.imageUrl)
+     .filter((url): url is string => !!url); // Ensure only defined URLs are included
+
+  const breakingNewsItems = [
+    'موقع الكوله تجريبى',
+    'الان يمكنك متابعة الاخبار بسهوله',
   ];
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header removed, title moved potentially to BreakingNewsBar or NewsSection */}
+      {/* New Header */}
+      <header className="flex justify-between items-center mb-8 pb-4 border-b">
+        {/* Right Side: Title and Subtitle */}
+        <div className="text-right">
+          <h1 className="text-3xl font-bold text-primary">الكوله اليوم</h1>
+          <p className="text-muted-foreground">موقع اخبارى</p>
+        </div>
+        {/* Left Side: Social Media Icons */}
+        <div className="flex items-center space-x-2">
+          <Button variant="ghost" size="icon" asChild>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <Facebook className="h-5 w-5 text-muted-foreground hover:text-primary" />
+            </a>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <Twitter className="h-5 w-5 text-muted-foreground hover:text-primary" />
+            </a>
+          </Button>
+          <Button variant="ghost" size="icon" asChild>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <Instagram className="h-5 w-5 text-muted-foreground hover:text-primary" />
+            </a>
+          </Button>
+        </div>
+      </header>
+
       <main>
-        {/* Pass image URLs and potentially the latest article to NewsSection */}
+        {/* Pass static news items and image URLs */}
         <NewsSection
           initialArticles={initialArticles}
           imageUrls={imageUrls}
-          latestArticle={initialArticles[0]} // Pass the first article as the "latest"
+          breakingNewsItems={breakingNewsItems} // Pass static items
         />
       </main>
       <footer className="mt-12 text-center text-muted-foreground text-sm">

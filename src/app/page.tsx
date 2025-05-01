@@ -8,6 +8,7 @@ import ImageSlider from '@/components/ImageSlider'; // Import ImageSlider
 import BreakingNewsBar from '@/components/BreakingNewsBar'; // Import BreakingNewsBar
 import { Skeleton } from '@/components/ui/skeleton'; // Import Skeleton
 import Link from 'next/link'; // Import Link for footer
+import Navbar from '@/components/Navbar'; // Import Navbar
 
 // Placeholder for Live Stream component
 const LiveStreamPlaceholder = () => (
@@ -72,6 +73,9 @@ export default async function Home() {
          </header>
 
          <main>
+           {/* Navbar */}
+           <Navbar className="mb-6" /> {/* Add Navbar here */}
+
            {/* Breaking News Bar */}
            <BreakingNewsBar newsItems={breakingNewsItems} className="mb-6" />
 

@@ -16,7 +16,7 @@ import {
   useSidebar,
 } from '@/components/ui/sidebar';
 import { Calendar as ShadCalendar } from '@/components/ui/calendar'; // Alias import
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button'; // Import buttonVariants
 import { cn } from '@/lib/utils';
 import Link from 'next/link'; // Import Link
@@ -103,8 +103,14 @@ interface AppSidebarProps {
 }
 
 export default function AppSidebar({ className }: AppSidebarProps) {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-   const { state, isMobile, toggleSidebar } = useSidebar(); // Get sidebar state and toggle function
+  // Initialize date state to undefined to avoid server/client mismatch
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  const { state, isMobile, toggleSidebar } = useSidebar(); // Get sidebar state and toggle function
+
+  // Set the date only on the client side after mounting
+  useEffect(() => {
+    setDate(new Date());
+  }, []);
 
   // Helper function to render sidebar group content with collapse handling
   const renderSidebarGroup = (
@@ -163,12 +169,15 @@ export default function AppSidebar({ className }: AppSidebarProps) {
          {/* Navigation Menu */}
          <SidebarMenu>
            <SidebarMenuItem>
-             <SidebarMenuButton href="/" tooltip="الرئيسية"> {/* Use Link for navigation */}
-               <Home />
-               <span>الرئيسية</span>
-             </SidebarMenuButton>
+             {/* Use Link component directly for client-side navigation */}
+              <Link href="/" legacyBehavior passHref>
+                <SidebarMenuButton tooltip="الرئيسية" isActive={false}> {/* Set isActive based on route if needed */}
+                    <Home />
+                    <span>الرئيسية</span>
+                </SidebarMenuButton>
+              </Link>
            </SidebarMenuItem>
-           {/* Add other menu items here */}
+           {/* Add other menu items here using Link */}
          </SidebarMenu>
 
           {/* WhatsApp Chat Section */}
@@ -187,26 +196,34 @@ export default function AppSidebar({ className }: AppSidebarProps) {
            <SidebarGroupLabel>التقويم</SidebarGroupLabel>
             {renderSidebarGroup(
               <Calendar className="h-5 w-5" />,
-              <ShadCalendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                dir="rtl" // Explicitly set direction for calendar
-                // Customize appearance for sidebar: reduce padding, make cells smaller
-                className="rounded-md border p-1 w-full" // Ensure it takes container width, smaller overall padding
-                classNames={{
-                  caption_label: "text-xs", // Smaller caption label
-                  head_cell: "text-muted-foreground rounded-md w-7 font-normal text-[0.7rem]", // Smaller head cells
-                  cell: "h-7 w-7 text-center text-xs p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20", // Smaller day cells
-                  day: cn(buttonVariants({ variant: "ghost" }), "h-7 w-7 p-0 font-normal aria-selected:opacity-100 text-xs"), // Smaller day button
-                  day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-                  day_today: "bg-accent text-accent-foreground",
-                  day_outside: "text-muted-foreground opacity-50",
-                  nav_button: cn(buttonVariants({ variant: "outline" }), "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100"), // Smaller nav buttons
-                  nav_button_previous: "absolute right-1", // Adjusted position for RTL - Changed from left-1
-                  nav_button_next: "absolute left-1", // Adjusted position for RTL - Changed from right-1
-                }}
-              />,
+              // Only render Calendar if date is set (client-side) to prevent hydration mismatch
+              date ? (
+                <ShadCalendar
+                  mode="single"
+                  selected={date}
+                  onSelect={setDate}
+                  dir="rtl" // Explicitly set direction for calendar
+                  // Customize appearance for sidebar: reduce padding, make cells smaller
+                  className="rounded-md border p-1 w-full" // Ensure it takes container width, smaller overall padding
+                  classNames={{
+                    caption_label: "text-xs", // Smaller caption label
+                    head_cell: "text-muted-foreground rounded-md w-7 font-normal text-[0.7rem]", // Smaller head cells
+                    cell: "h-7 w-7 text-center text-xs p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20", // Smaller day cells
+                    day: cn(buttonVariants({ variant: "ghost" }), "h-7 w-7 p-0 font-normal aria-selected:opacity-100 text-xs"), // Smaller day button
+                    day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                    day_today: "bg-accent text-accent-foreground",
+                    day_outside: "text-muted-foreground opacity-50",
+                    nav_button: cn(buttonVariants({ variant: "outline" }), "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100"), // Smaller nav buttons
+                    nav_button_previous: "absolute right-1", // Adjusted position for RTL - Changed from left-1
+                    nav_button_next: "absolute left-1", // Adjusted position for RTL - Changed from right-1
+                  }}
+                />
+               ) : (
+                 // You might show a simple loading state or nothing while date is undefined
+                 <div className="rounded-md border p-1 w-full h-[200px] flex items-center justify-center text-muted-foreground text-xs">
+                   Loading Calendar...
+                 </div>
+               ),
               'التقويم',
               'إظهار التقويم'
             )}

@@ -97,8 +97,8 @@ export default function AppSidebar({ className }: AppSidebarProps) {
                    mode="single"
                    selected={date}
                    onSelect={setDate}
-                   // Ensure calendar adds padding internally, but container controls width
-                   className="rounded-md border p-0" // p-0 to avoid double padding with internal DayPicker padding
+                   // Removed p-0 to allow default padding, potentially fixing button issue
+                   className="rounded-md border"
                    dir="rtl" // Explicitly set direction for calendar
                  />
                </div>

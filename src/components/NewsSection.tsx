@@ -118,10 +118,11 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
         <Tabs defaultValue={selectedCategory} onValueChange={handleTabChange} className="w-auto">
           {/* Remove TabsList background and padding */}
           {/* Use space-x-reverse for RTL spacing */}
-          <TabsList className="bg-transparent p-0 h-auto justify-start gap-4 space-x-reverse">
+          <TabsList className="bg-transparent p-0 h-auto justify-start gap-4 space-x-reverse"> {/* Keep space-x-reverse */}
+            {/* Reordered TabsTrigger and Link for RTL: Local, Sohag, Egypt, More */}
             {/* Style TabsTrigger as red links */}
             <TabsTrigger
-              value="local"
+              value="local" // Rightmost
               className="text-destructive data-[state=active]:underline data-[state=active]:font-bold data-[state=active]:shadow-none p-0 text-sm"
             >
               أخبارنا المحلية
@@ -138,7 +139,7 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
             >
               أخبار مصر
             </TabsTrigger>
-             {/* More Link */}
+             {/* More Link - Leftmost */}
             <Link href="#" className="text-destructive text-sm flex items-center hover:underline">
                المزيد
                <ChevronLeft className="h-4 w-4 mr-1" /> {/* Use marginRight in RTL */}
@@ -176,4 +177,3 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
     </div>
   );
 }
-

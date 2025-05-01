@@ -102,27 +102,27 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
 
       {/* News Categories Section - Styled to match image */}
       {/* Container with bottom border */}
-      {/* Reversed order of h2 and Tabs for RTL layout */}
-      <div className="flex items-center justify-between border-b-2 border-destructive pb-1 mb-4 relative">
+      {/* Use flex-row-reverse for RTL layout: Header on the right, Tabs on the left */}
+      <div className="flex flex-row-reverse items-center justify-between border-b-2 border-destructive pb-1 mb-4 relative">
         {/* Heading on the right - Styled like the image */}
         {/* Using destructive background and foreground */}
-        {/* Adding padding and a slight skew effect using clip-path (optional, can be simplified) */}
+        {/* Adding padding and skew effect */}
         <h2 className="bg-destructive text-destructive-foreground font-semibold text-lg flex-shrink-0 px-6 py-2 relative">
-           {/* Optional: Add the angled edge effect - Adjusted for RTL */}
-           <div className="absolute inset-y-0 right-0 w-4 bg-destructive transform skew-x-12 translate-x-2"></div>
+           {/* Angled edge effect on the LEFT for RTL */}
+           {/* Use negative skew and translate-x */}
+           <div className="absolute inset-y-0 left-0 w-4 bg-destructive transform -skew-x-12 -translate-x-2"></div>
            <span className="relative z-10">أحدث الأخبار</span>
-           {/* You might need adjustments for perfect shape matching */}
         </h2>
 
          {/* Tabs on the left */}
+         {/* Adjust TabsList for proper spacing and alignment in RTL */}
         <Tabs defaultValue={selectedCategory} onValueChange={handleTabChange} className="w-auto">
           {/* Remove TabsList background and padding */}
-          {/* Use space-x-reverse for RTL spacing */}
-          <TabsList className="bg-transparent p-0 h-auto justify-start gap-4 space-x-reverse"> {/* Keep space-x-reverse */}
-            {/* Reordered TabsTrigger and Link for RTL: Local, Sohag, Egypt, More */}
-            {/* Style TabsTrigger as red links */}
+          {/* Use gap for spacing, ensure it's applied correctly in RTL */}
+          <TabsList className="bg-transparent p-0 h-auto flex justify-start gap-4"> {/* Use flex and gap */}
+            {/* Order for RTL: Local, Sohag, Egypt, More (Right to Left) */}
             <TabsTrigger
-              value="local" // Rightmost
+              value="local"
               className="text-destructive data-[state=active]:underline data-[state=active]:font-bold data-[state=active]:shadow-none p-0 text-sm"
             >
               أخبارنا المحلية
@@ -142,7 +142,7 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
              {/* More Link - Leftmost */}
             <Link href="#" className="text-destructive text-sm flex items-center hover:underline">
                المزيد
-               <ChevronLeft className="h-4 w-4 mr-1" /> {/* Use marginRight in RTL */}
+               <ChevronLeft className="h-4 w-4 mr-1" /> {/* Arrow points left (start in LTR) */}
             </Link>
           </TabsList>
         </Tabs>
@@ -177,3 +177,4 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
     </div>
   );
 }
+

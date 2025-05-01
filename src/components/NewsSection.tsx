@@ -102,11 +102,23 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
 
       {/* News Categories Section - Styled to match image */}
       {/* Container with bottom border */}
+      {/* Reversed order of h2 and Tabs for RTL layout */}
       <div className="flex items-center justify-between border-b-2 border-destructive pb-1 mb-4 relative">
+        {/* Heading on the right - Styled like the image */}
+        {/* Using destructive background and foreground */}
+        {/* Adding padding and a slight skew effect using clip-path (optional, can be simplified) */}
+        <h2 className="bg-destructive text-destructive-foreground font-semibold text-lg flex-shrink-0 px-6 py-2 relative">
+           {/* Optional: Add the angled edge effect - Adjusted for RTL */}
+           <div className="absolute inset-y-0 right-0 w-4 bg-destructive transform skew-x-12 translate-x-2"></div>
+           <span className="relative z-10">أحدث الأخبار</span>
+           {/* You might need adjustments for perfect shape matching */}
+        </h2>
+
          {/* Tabs on the left */}
         <Tabs defaultValue={selectedCategory} onValueChange={handleTabChange} className="w-auto">
           {/* Remove TabsList background and padding */}
-          <TabsList className="bg-transparent p-0 h-auto justify-start gap-4">
+          {/* Use space-x-reverse for RTL spacing */}
+          <TabsList className="bg-transparent p-0 h-auto justify-start gap-4 space-x-reverse">
             {/* Style TabsTrigger as red links */}
             <TabsTrigger
               value="local"
@@ -133,16 +145,6 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
             </Link>
           </TabsList>
         </Tabs>
-
-         {/* Heading on the right - Styled like the image */}
-         {/* Using destructive background and foreground */}
-         {/* Adding padding and a slight skew effect using clip-path (optional, can be simplified) */}
-        <h2 className="bg-destructive text-destructive-foreground font-semibold text-lg flex-shrink-0 px-6 py-2 relative">
-           {/* Optional: Add the angled edge effect */}
-           <div className="absolute inset-y-0 left-0 w-4 bg-destructive transform -skew-x-12 -translate-x-2"></div>
-           <span className="relative z-10">أحدث الأخبار</span>
-           {/* You might need adjustments for perfect shape matching */}
-        </h2>
       </div>
 
 
@@ -174,3 +176,4 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
     </div>
   );
 }
+

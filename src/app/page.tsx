@@ -86,10 +86,12 @@ export default async function Home() {
              {/* Sidebar - moved here */}
              {/* Make sidebar sticky within its container */}
              {/* Added width constraint for smaller screens too */}
-             <div className="w-full md:w-[var(--sidebar-width)] md:sticky md:top-8 self-start">
-                {/* Pass a class to limit height and allow scrolling if needed */}
-               <AppSidebar className="h-auto md:max-h-[calc(100vh-4rem)] md:overflow-y-auto" />
-             </div>
+             {/* Use a specific width and adjust sticky position */}
+              <div className="w-full md:w-[var(--sidebar-width)] md:sticky md:top-8 self-start md:h-[calc(100vh-4rem)] md:overflow-y-auto">
+                 {/* Removed className from AppSidebar - styling applied to container div */}
+                 <AppSidebar />
+              </div>
+
 
              {/* News Section takes remaining space */}
              <div className="flex-1">
@@ -102,17 +104,18 @@ export default async function Home() {
          </main>
        </div>
         {/* Enhanced Footer */}
-        {/* Changed footer background to bg-background */}
-        <footer className="bg-background border-t mt-auto py-6 px-4 sm:px-6">
-           <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
+        {/* Changed footer background to primary (dark blue/gray in light mode) and card (darker gray in dark mode) */}
+        <footer className="bg-primary dark:bg-card border-t mt-auto py-6 px-4 sm:px-6">
+           <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-primary-foreground dark:text-card-foreground">
              <div className="mb-4 md:mb-0">
                &copy; {new Date().getFullYear()} الكوله اليوم. جميع الحقوق محفوظة.
              </div>
              <div className="flex space-x-4 space-x-reverse"> {/* space-x-reverse for RTL */}
-               <Link href="/privacy" className="hover:text-primary transition-colors">
+                {/* Use appropriate text color for links based on footer background */}
+               <Link href="/privacy" className="text-primary-foreground dark:text-card-foreground hover:text-accent dark:hover:text-accent transition-colors">
                  سياسة الخصوصية
                </Link>
-               <Link href="/contact" className="hover:text-primary transition-colors">
+               <Link href="/contact" className="text-primary-foreground dark:text-card-foreground hover:text-accent dark:hover:text-accent transition-colors">
                  اتصل بنا
                </Link>
                <span className="hidden md:inline">|</span> {/* Separator for desktop */}

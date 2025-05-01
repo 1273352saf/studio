@@ -1,6 +1,6 @@
 'use client';
 
-import { Calendar, CircleDollarSign, Home, CloudSun, Newspaper, Globe } from 'lucide-react';
+import { Calendar, CircleDollarSign, Home, CloudSun, Newspaper, Globe, MessageSquare } from 'lucide-react'; // Added MessageSquare for WhatsApp
 import {
   Sidebar,
   SidebarContent,
@@ -19,6 +19,7 @@ import { Calendar as ShadCalendar } from '@/components/ui/calendar'; // Alias im
 import { useState } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button'; // Import buttonVariants
 import { cn } from '@/lib/utils';
+import Link from 'next/link'; // Import Link
 
 // Placeholder for Currency Rates
 const CurrencyRates = () => {
@@ -76,6 +77,25 @@ const BreakingNews = () => {
     </div>
   );
 };
+
+// WhatsApp Chat Component
+const WhatsAppChat = () => {
+  // Replace with your actual WhatsApp number including country code (without + or spaces)
+  const whatsappNumber = "201234567890"; // Example: Egyptian number
+  const whatsappLink = `https://wa.me/${whatsappNumber}`;
+
+  return (
+    <div className="text-xs text-center">
+      <p className="mb-2 text-muted-foreground">تواصل معنا مباشرة عبر واتساب!</p>
+      <Button variant="outline" size="sm" asChild className="w-full bg-green-600 hover:bg-green-700 text-white border-green-700 hover:border-green-800">
+        <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
+           <MessageSquare className="h-4 w-4 mr-2" /> دردشة واتساب
+        </a>
+      </Button>
+       <p className="text-muted-foreground text-[10px] pt-2">انقر للبدء</p>
+    </div>
+  );
+}
 
 
 interface AppSidebarProps {
@@ -143,13 +163,24 @@ export default function AppSidebar({ className }: AppSidebarProps) {
          {/* Navigation Menu */}
          <SidebarMenu>
            <SidebarMenuItem>
-             <SidebarMenuButton href="#" tooltip="الرئيسية"> {/* Add tooltip */}
+             <SidebarMenuButton href="/" tooltip="الرئيسية"> {/* Use Link for navigation */}
                <Home />
                <span>الرئيسية</span>
              </SidebarMenuButton>
            </SidebarMenuItem>
            {/* Add other menu items here */}
          </SidebarMenu>
+
+          {/* WhatsApp Chat Section */}
+         <SidebarGroup>
+           <SidebarGroupLabel>تواصل معنا</SidebarGroupLabel>
+           {renderSidebarGroup(
+              <MessageSquare className="h-5 w-5 text-green-600" />, // WhatsApp Icon
+              <WhatsAppChat />,
+              'دردشة واتساب',
+              'فتح دردشة واتساب'
+           )}
+         </SidebarGroup>
 
          {/* Calendar Section */}
          <SidebarGroup>

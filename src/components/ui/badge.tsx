@@ -15,6 +15,10 @@ const badgeVariants = cva(
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
         outline: "text-foreground",
+        // Add sentiment variants if needed directly here, though dynamic class application in ArticleCard is more flexible
+        // positive: "border-green-300 bg-green-100 text-green-800",
+        // negative: "border-red-300 bg-red-100 text-red-800",
+        // neutral: "border-border bg-muted text-muted-foreground",
       },
     },
     defaultVariants: {

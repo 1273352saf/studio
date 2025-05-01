@@ -41,14 +41,17 @@ const CurrencyRates = () => {
   );
 };
 
+interface AppSidebarProps {
+  className?: string; // Accept className prop
+}
 
-export default function AppSidebar() {
+export default function AppSidebar({ className }: AppSidebarProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
    const { state, isMobile, toggleSidebar } = useSidebar(); // Get sidebar state and toggle function
 
   return (
-    // Use Sidebar component with appropriate props
-     <Sidebar side="left" variant="sidebar" collapsible="icon">
+    // Use Sidebar component with appropriate props and apply className
+     <Sidebar side="right" variant="sidebar" collapsible="icon" className={cn("border rounded-lg", className)}> {/* Changed side to right, apply border and className */}
        <SidebarHeader className="items-center">
          {/* Show trigger only when collapsed or on mobile */}
          {(state === 'collapsed' || isMobile) && (

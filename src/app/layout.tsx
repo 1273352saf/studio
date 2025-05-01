@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SidebarProvider } from "@/components/ui/sidebar"; // Import SidebarProvider
-import AppSidebar from "@/components/AppSidebar"; // Import the sidebar component
+// AppSidebar is now rendered within page.tsx
 import { Toaster } from "@/components/ui/toaster"; // For toast notifications
 
 const inter = Inter({ subsets: ["latin"] });
@@ -28,15 +28,9 @@ export default function RootLayout({
         )}
       >
         {/* Wrap the content with SidebarProvider */}
+        {/* Sidebar is removed from here and placed in page.tsx */}
         <SidebarProvider defaultOpen={true} collapsible="icon"> {/* Keep sidebar open by default, make it icon collapsible */}
-          <div className="flex">
-            {/* Include the Sidebar */}
-            <AppSidebar />
-             {/* Main content area */}
-             <main className="flex-1">
-              {children}
-            </main>
-          </div>
+          {children}
         </SidebarProvider>
          <Toaster /> {/* Add Toaster for notifications */}
       </body>

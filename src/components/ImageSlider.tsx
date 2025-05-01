@@ -25,13 +25,18 @@ export default function ImageSlider({ images, className }: ImageSliderProps) {
                    src={src}
                    alt={`Featured image ${index + 1}`}
                    // Use layout="fill" and objectFit="cover" for responsive image filling
-                   layout="fill"
-                   objectFit="cover"
+                   layout="fill" // Use fill layout
+                   objectFit="cover" // Use cover to fill the container
                    className="rounded-md" // Keep rounded corners if desired
                    priority={index < 2} // Prioritize loading first couple of images
                    // Add specific hint if it's the provided image, otherwise use generic
-                   data-ai-hint={src.includes('wikimedia') ? 'basketball players action' : 'news landscape'}
-                   unoptimized={src.includes('wikimedia')} // Add unoptimized prop for external domains not in next.config.js
+                   data-ai-hint={
+                     src.includes('wikimedia') ? 'basketball players action' :
+                     src.includes('encrypted-tbn0.gstatic.com') ? 'soccer players action' : // Hint for the new image
+                     'news landscape'
+                   }
+                    // Add unoptimized prop for external domains not explicitly listed in next.config.js or known CDNs
+                   unoptimized={!src.startsWith('/') && !src.includes('picsum.photos') && !src.includes('upload.wikimedia.org')}
                  />
                </div>
              </figure>

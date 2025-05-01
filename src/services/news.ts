@@ -35,6 +35,7 @@ export async function getNewsArticles(keywords: string): Promise<NewsArticle[]> 
 
   // Use the provided image and other placeholders
   const providedImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/60/JaVale_McGee_Joakim_Noah_2011.jpg';
+  const soccerImageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm1hQ5ZqXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXQ&usqp=CAU'; // New soccer image
 
   return [
     {
@@ -63,7 +64,7 @@ export async function getNewsArticles(keywords: string): Promise<NewsArticle[]> 
       summary: 'The city council voted unanimously to approve the construction of a new public park in the downtown area, featuring green spaces and recreational facilities.',
       source: 'City Gazette',
       url: 'https://example.com/article4',
-      imageUrl: providedImageUrl // Use the provided image again
+      imageUrl: soccerImageUrl // Use the soccer image
     },
      {
       title: 'Stock Market Hits Record High Amidst Economic Optimism',
@@ -91,7 +92,7 @@ export async function getNewsArticles(keywords: string): Promise<NewsArticle[]> 
         summary: 'The annual Michelin Guide release has honored several new restaurants with coveted stars, highlighting innovation and excellence in gastronomy.',
         source: 'Food & Wine Magazine',
         url: 'https://example.com/article8',
-        imageUrl: 'https://picsum.photos/600/400?random=8'
+        imageUrl: soccerImageUrl // Use the soccer image again
     }
   ];
 }

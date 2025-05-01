@@ -1,7 +1,6 @@
-
 'use client';
 
-import { Calendar, CircleDollarSign, Home } from 'lucide-react';
+import { Calendar, CircleDollarSign, Home, CloudSun, Newspaper, Globe } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +20,7 @@ import { useState } from 'react';
 import { Button, buttonVariants } from '@/components/ui/button'; // Import buttonVariants
 import { cn } from '@/lib/utils';
 
+// Placeholder for Currency Rates
 const CurrencyRates = () => {
   // Placeholder data - replace with actual API call
   const rates = {
@@ -42,6 +42,42 @@ const CurrencyRates = () => {
   );
 };
 
+// Placeholder for Weather
+const WeatherInfo = () => {
+  return (
+    <div className="space-y-2 text-xs">
+      <div className="flex justify-between items-center">
+        <span>القاهرة</span>
+        <span className="font-mono">32°C مشمس</span>
+      </div>
+      <p className="text-muted-foreground text-[10px] pt-1">بيانات الطقس للعرض</p>
+    </div>
+  );
+};
+
+// Placeholder for Sports News
+const SportsNews = () => {
+  return (
+    <div className="space-y-2 text-xs">
+      <p className="font-medium">الأهلي يفوز بالدوري</p>
+      <p className="text-muted-foreground">ريال مدريد يتعادل في مباراة مثيرة</p>
+      <p className="text-muted-foreground text-[10px] pt-1">أخبار رياضية للعرض</p>
+    </div>
+  );
+};
+
+// Placeholder for Breaking News (Arab/World)
+const BreakingNews = () => {
+  return (
+    <div className="space-y-2 text-xs">
+       <p className="font-medium text-red-600">عاجل: حدث هام في الشرق الأوسط</p>
+      <p className="text-muted-foreground">تطورات جديدة في الأزمة العالمية</p>
+      <p className="text-muted-foreground text-[10px] pt-1">أخبار عاجلة للعرض</p>
+    </div>
+  );
+};
+
+
 interface AppSidebarProps {
   className?: string; // Accept className prop
 }
@@ -49,6 +85,40 @@ interface AppSidebarProps {
 export default function AppSidebar({ className }: AppSidebarProps) {
   const [date, setDate] = useState<Date | undefined>(new Date());
    const { state, isMobile, toggleSidebar } = useSidebar(); // Get sidebar state and toggle function
+
+  // Helper function to render sidebar group content with collapse handling
+  const renderSidebarGroup = (
+     icon: React.ReactNode,
+     content: React.ReactNode,
+     label: string,
+     ariaLabel: string
+   ) => (
+     <SidebarGroupContent className={cn(
+       'transition-opacity duration-300 relative', // Added relative positioning
+       state === 'collapsed'
+         ? 'flex justify-center items-center h-10 opacity-0 pointer-events-none' // Icon centered, hidden when collapsed
+         : 'opacity-100' // Visible when expanded
+     )}>
+       {/* Content, only visible when expanded */}
+       <div className={cn(state === 'expanded' ? 'block' : 'hidden')}>
+         {content}
+       </div>
+       {/* Button with icon, only visible when collapsed */}
+       <Button
+         variant="ghost"
+         size="icon"
+         onClick={toggleSidebar}
+         className={cn(
+           'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300', // Center icon
+           state === 'collapsed' ? 'opacity-100' : 'opacity-0 pointer-events-none' // Show only when collapsed
+         )}
+         aria-label={ariaLabel} // Accessibility label
+       >
+         {icon}
+       </Button>
+     </SidebarGroupContent>
+   );
+
 
   return (
     // Use Sidebar component with appropriate props and apply className
@@ -69,7 +139,7 @@ export default function AppSidebar({ className }: AppSidebarProps) {
          </h2>
        </SidebarHeader>
 
-      <SidebarContent className="p-2"> {/* Adjust padding */}
+      <SidebarContent className="p-2 space-y-4"> {/* Add space-y for vertical spacing */}
          {/* Navigation Menu */}
          <SidebarMenu>
            <SidebarMenuItem>
@@ -82,84 +152,79 @@ export default function AppSidebar({ className }: AppSidebarProps) {
          </SidebarMenu>
 
          {/* Calendar Section */}
-         <SidebarGroup className="mt-4">
+         <SidebarGroup>
            <SidebarGroupLabel>التقويم</SidebarGroupLabel>
-           {/* Apply flex styles for centering icon when collapsed */}
-           <SidebarGroupContent className={cn(
-                'transition-all duration-300 relative', // Added relative positioning for centering icon
-                state === 'collapsed'
-                  ? 'flex justify-center items-center h-10 opacity-0 pointer-events-none' // Icon centered, hidden when collapsed
-                  : 'opacity-100' // Visible when expanded
-              )}>
-               {/* Calendar container ensures it takes width, only visible when expanded */}
-               {/* Removed w-full from calendar to allow natural sizing */}
-               <div className={cn(state === 'expanded' ? 'block' : 'hidden')}>
-                 <ShadCalendar
-                   mode="single"
-                   selected={date}
-                   onSelect={setDate}
-                   dir="rtl" // Explicitly set direction for calendar
-                   // Customize appearance for sidebar: reduce padding, make cells smaller
-                   className="rounded-md border p-1 w-full" // Ensure it takes container width, smaller overall padding
-                   classNames={{
-                     caption_label: "text-xs", // Smaller caption label
-                     head_cell: "text-muted-foreground rounded-md w-7 font-normal text-[0.7rem]", // Smaller head cells
-                     cell: "h-7 w-7 text-center text-xs p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20", // Smaller day cells
-                     day: cn(buttonVariants({ variant: "ghost" }), "h-7 w-7 p-0 font-normal aria-selected:opacity-100 text-xs"), // Smaller day button
-                     day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
-                     day_today: "bg-accent text-accent-foreground",
-                     day_outside: "text-muted-foreground opacity-50",
-                     nav_button: cn(buttonVariants({ variant: "outline" }), "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100"), // Smaller nav buttons
-                     nav_button_previous: "absolute left-1", // Adjusted position
-                     nav_button_next: "absolute right-1", // Adjusted position
-                   }}
-                 />
-               </div>
-               {/* Button with icon, only visible when collapsed */}
-               <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleSidebar}
-                  className={cn(
-                    'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300', // Center icon
-                    state === 'collapsed' ? 'opacity-100' : 'opacity-0 pointer-events-none' // Show only when collapsed
-                  )}
-                  aria-label="Show Calendar" // Accessibility label
-                >
-                  <Calendar className="h-5 w-5" />
-               </Button>
-           </SidebarGroupContent>
+            {renderSidebarGroup(
+              <Calendar className="h-5 w-5" />,
+              <ShadCalendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                dir="rtl" // Explicitly set direction for calendar
+                // Customize appearance for sidebar: reduce padding, make cells smaller
+                className="rounded-md border p-1 w-full" // Ensure it takes container width, smaller overall padding
+                classNames={{
+                  caption_label: "text-xs", // Smaller caption label
+                  head_cell: "text-muted-foreground rounded-md w-7 font-normal text-[0.7rem]", // Smaller head cells
+                  cell: "h-7 w-7 text-center text-xs p-0 relative [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20", // Smaller day cells
+                  day: cn(buttonVariants({ variant: "ghost" }), "h-7 w-7 p-0 font-normal aria-selected:opacity-100 text-xs"), // Smaller day button
+                  day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground",
+                  day_today: "bg-accent text-accent-foreground",
+                  day_outside: "text-muted-foreground opacity-50",
+                  nav_button: cn(buttonVariants({ variant: "outline" }), "h-6 w-6 bg-transparent p-0 opacity-50 hover:opacity-100"), // Smaller nav buttons
+                  nav_button_previous: "absolute right-1", // Adjusted position for RTL - Changed from left-1
+                  nav_button_next: "absolute left-1", // Adjusted position for RTL - Changed from right-1
+                }}
+              />,
+              'التقويم',
+              'إظهار التقويم'
+            )}
          </SidebarGroup>
-
 
          {/* Currency Rates Section */}
-         <SidebarGroup className="mt-4">
+         <SidebarGroup>
            <SidebarGroupLabel>أسعار العملات</SidebarGroupLabel>
-            <SidebarGroupContent className={cn(
-               'transition-opacity duration-300 relative', // Added relative positioning
-               state === 'collapsed'
-                  ? 'flex justify-center items-center h-10 opacity-0 pointer-events-none' // Icon centered, hidden when collapsed
-                  : 'opacity-100' // Visible when expanded
-            )}>
-              {/* Currency rates content, only visible when expanded */}
-               <div className={cn(state === 'expanded' ? 'block' : 'hidden')}>
-                 <CurrencyRates />
-               </div>
-               {/* Button with icon, only visible when collapsed */}
-               <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleSidebar}
-                   className={cn(
-                     'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity duration-300', // Center icon
-                     state === 'collapsed' ? 'opacity-100' : 'opacity-0 pointer-events-none' // Show only when collapsed
-                   )}
-                  aria-label="Show Currency Rates" // Accessibility label
-                >
-                  <CircleDollarSign className="h-5 w-5" />
-                </Button>
-            </SidebarGroupContent>
+            {renderSidebarGroup(
+               <CircleDollarSign className="h-5 w-5" />,
+               <CurrencyRates />,
+               'أسعار العملات',
+               'إظهار أسعار العملات'
+            )}
          </SidebarGroup>
+
+          {/* Weather Section */}
+         <SidebarGroup>
+           <SidebarGroupLabel>حالة الطقس</SidebarGroupLabel>
+           {renderSidebarGroup(
+             <CloudSun className="h-5 w-5" />,
+             <WeatherInfo />,
+             'حالة الطقس',
+             'إظهار حالة الطقس'
+           )}
+         </SidebarGroup>
+
+         {/* Sports News Section */}
+         <SidebarGroup>
+           <SidebarGroupLabel>أخبار رياضية</SidebarGroupLabel>
+           {renderSidebarGroup(
+             <Newspaper className="h-5 w-5" />, // Using Newspaper icon for sports
+             <SportsNews />,
+             'أخبار رياضية',
+             'إظهار الأخبار الرياضية'
+           )}
+         </SidebarGroup>
+
+         {/* Breaking News (Arab/World) Section */}
+         <SidebarGroup>
+           <SidebarGroupLabel>أخبار عاجلة</SidebarGroupLabel>
+            {renderSidebarGroup(
+             <Globe className="h-5 w-5" />, // Using Globe icon for world news
+             <BreakingNews />,
+             'أخبار عاجلة',
+             'إظهار الأخبار العاجلة'
+           )}
+         </SidebarGroup>
+
       </SidebarContent>
 
       <SidebarFooter className="p-2 text-center text-xs text-muted-foreground">
@@ -169,4 +234,3 @@ export default function AppSidebar({ className }: AppSidebarProps) {
     </Sidebar>
   );
 }
-

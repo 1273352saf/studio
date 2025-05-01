@@ -26,19 +26,19 @@ export interface NewsArticle {
   /**
    * Category of the news article.
    */
-  category?: 'local' | 'governorate' | 'world' | 'general'; // Added category
+  category?: 'local' | 'sohag' | 'egypt' | 'governorate' | 'world' | 'general'; // Added category, including 'sohag', 'egypt'
 }
 
 /**
  * Asynchronously retrieves news articles based on keywords and category.
  *
  * @param keywords The keywords to search for in news articles.
- * @param category Optional category to filter news articles.
+ * @param category Optional category to filter news articles. Allowed values: 'local', 'governorate' (used for sohag/egypt), 'world'.
  * @returns A promise that resolves to an array of NewsArticle objects.
  */
 export async function getNewsArticles(
   keywords: string,
-  category?: 'local' | 'governorate' | 'world'
+  category?: 'local' | 'governorate' | 'world' // API accepts 'local', 'governorate', 'world'
 ): Promise<NewsArticle[]> {
   console.log(`API Call Simulation: Searching for "${keywords}" in category "${category || 'all'}"`);
 
@@ -47,6 +47,7 @@ export async function getNewsArticles(
   const providedImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/60/JaVale_McGee_Joakim_Noah_2011.jpg';
   const soccerImageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm1hQ5ZqXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXQ&usqp=CAU';
 
+  // Mock data including potential 'sohag' and 'egypt' categories for display mapping later
   const allArticles: NewsArticle[] = [
     {
       title: 'خبر محلي: افتتاح حديقة جديدة في المدينة',
@@ -54,7 +55,7 @@ export async function getNewsArticles(
       source: 'جريدة المدينة',
       url: 'https://example.com/local1',
       imageUrl: 'https://picsum.photos/600/400?random=1',
-      category: 'local'
+      category: 'local' // Corresponds to 'local' API category
     },
     {
       title: 'عالمي: اتفاق تجاري جديد بين دولتين',
@@ -62,15 +63,15 @@ export async function getNewsArticles(
       source: 'شبكة الأخبار العالمية',
       url: 'https://example.com/world1',
       imageUrl: 'https://picsum.photos/600/400?random=2',
-      category: 'world'
+      category: 'world' // Corresponds to 'world' API category
     },
     {
-      title: 'محافظات: تطوير البنية التحتية في محافظة XYZ',
-      summary: 'أعلنت السلطات المحلية عن خطة شاملة لتطوير الطرق والمرافق الخدمية في محافظة XYZ خلال العام القادم.',
+      title: 'محافظة سوهاج: تطوير البنية التحتية',
+      summary: 'أعلنت السلطات المحلية عن خطة شاملة لتطوير الطرق والمرافق الخدمية في محافظة سوهاج خلال العام القادم.',
       source: 'أخبار المحافظات',
-      url: 'https://example.com/gov1',
+      url: 'https://example.com/sohag1',
       imageUrl: soccerImageUrl,
-      category: 'governorate'
+      category: 'sohag' // Will map to 'governorate' API category
     },
      {
       title: 'محلي: شركة تقنية محلية تعلن عن ابتكار جديد',
@@ -79,6 +80,14 @@ export async function getNewsArticles(
       url: 'https://example.com/local2',
       imageUrl: providedImageUrl,
       category: 'local'
+    },
+     {
+      title: 'أخبار مصر: مشروع قومي جديد للطرق',
+      summary: 'الحكومة تعلن عن بدء تنفيذ مشروع قومي ضخم لتوسعة شبكة الطرق الرئيسية في مصر.',
+      source: 'وكالة أنباء مصر',
+      url: 'https://example.com/egypt1',
+      imageUrl: 'https://picsum.photos/600/400?random=4',
+      category: 'egypt' // Will map to 'governorate' API category
     },
      {
       title: 'عالمي: مؤتمر المناخ يختتم أعماله باتفاق تاريخي',
@@ -94,7 +103,7 @@ export async function getNewsArticles(
       source: 'صوت المحافظات',
       url: 'https://example.com/gov2',
       imageUrl: 'https://picsum.photos/600/400?random=6',
-      category: 'governorate'
+      category: 'governorate' // Corresponds to 'governorate' API category
     },
     {
       title: 'محلي: فعالية ثقافية تجذب الجمهور في وسط المدينة',
@@ -111,15 +120,41 @@ export async function getNewsArticles(
         url: 'https://example.com/world3',
         imageUrl: 'https://picsum.photos/600/400?random=8',
         category: 'world'
-    }
+    },
+    {
+      title: 'أخبار مصر: زيادة الاستثمارات في قطاع السياحة',
+      summary: 'تشهد مصر زيادة ملحوظة في الاستثمارات السياحية مع توقعات بموسم سياحي قوي.',
+      source: 'جريدة الاقتصاد المصري',
+      url: 'https://example.com/egypt2',
+      imageUrl: 'https://picsum.photos/600/400?random=9',
+      category: 'egypt' // Will map to 'governorate' API category
+    },
+     {
+      title: 'محافظة سوهاج: مبادرة لدعم المشاريع الصغيرة',
+      summary: 'أطلقت محافظة سوهاج مبادرة جديدة لدعم رواد الأعمال وأصحاب المشاريع الصغيرة والمتوسطة.',
+      source: 'صوت سوهاج',
+      url: 'https://example.com/sohag2',
+      imageUrl: 'https://picsum.photos/600/400?random=10',
+      category: 'sohag' // Will map to 'governorate' API category
+    },
+
   ];
 
-  // Simulate filtering based on category and keywords
+  // Simulate filtering based on API category and keywords
   let filteredArticles = allArticles;
 
   if (category) {
-    filteredArticles = filteredArticles.filter(article => article.category === category);
+    // Filter based on the API category ('local', 'governorate', 'world')
+    filteredArticles = filteredArticles.filter(article => {
+        if (category === 'governorate') {
+            // If API category is 'governorate', include articles marked as 'sohag', 'egypt', or 'governorate'
+            return article.category === 'sohag' || article.category === 'egypt' || article.category === 'governorate';
+        }
+        // Otherwise, match the exact category ('local' or 'world')
+        return article.category === category;
+    });
   }
+
 
   if (keywords) {
     const lowerKeywords = keywords.toLowerCase();

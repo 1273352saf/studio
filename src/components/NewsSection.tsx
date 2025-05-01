@@ -8,38 +8,33 @@ import ArticleCard from '@/components/ArticleCard';
 import { Skeleton } from '@/components/ui/skeleton'; // For loading states
 import { Input } from '@/components/ui/input'; // Import Input
 import { Button } from '@/components/ui/button'; // Import Button
-import { Search, Newspaper } from 'lucide-react'; // Import Search and Newspaper icons
+import { Search, ChevronLeft } from 'lucide-react'; // Import Search and ChevronLeft icons
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Import Tabs components
+import Link from 'next/link'; // Import Link for 'More'
 import { cn } from '@/lib/utils'; // Import cn
 
 interface NewsSectionProps {
   initialArticles: NewsArticle[];
 }
 
-// Define categories - added 'sohag'
-type NewsCategory = 'local' | 'sohag' | 'governorate' | 'world'; // Added 'sohag'
+// Define categories - updated to match new requirement
+type NewsCategory = 'local' | 'sohag' | 'egypt';
 
 // Helper to map display category to API category
-const getApiCategory = (category: NewsCategory): 'local' | 'governorate' | 'world' => {
-  if (category === 'sohag') {
-    return 'governorate'; // Map 'sohag' to 'governorate' for the API call
-  }
-   if (category === 'governorate') {
+const getApiCategory = (category: NewsCategory): 'local' | 'governorate' => {
+  if (category === 'sohag' || category === 'egypt') {
+    // Map 'sohag' and 'egypt' to 'governorate' for the API call
     return 'governorate';
   }
-   if (category === 'world') {
-      return 'world';
-   }
   return 'local'; // Default to 'local'
 };
 
 // Helper to get display name for category
 const getCategoryDisplayName = (category: NewsCategory): string => {
   switch (category) {
-    case 'local': return 'محلية';
-    case 'sohag': return 'سوهاج';
-    case 'governorate': return 'محافظات';
-    case 'world': return 'عالمية'; // Keep world for message consistency if needed elsewhere
+    case 'local': return 'أخبارنا المحلية';
+    case 'sohag': return 'أخبار محافظة سوهاج';
+    case 'egypt': return 'أخبار مصر';
     default: return 'أخبار';
   }
 }
@@ -58,8 +53,8 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
     try {
       console.log(`Fetching articles for: term="${term}", category="${apiCategory}" (Display: ${displayCategory})`); // Log fetching parameters
       const fetchedArticles = await getNewsArticles(term, apiCategory);
-      // Filter further if needed, e.g., if API returns all governorates for 'sohag'
-      // For now, assume API handles it or display all governorate news under 'sohag' tab
+      // TODO: If 'egypt' needs specific filtering beyond 'governorate', add it here.
+      // For now, display all governorate news under 'sohag' and 'egypt' tabs.
       setArticles(fetchedArticles);
     } catch (error) {
       console.error("Error fetching articles:", error);
@@ -105,23 +100,51 @@ export default function NewsSection({ initialArticles }: NewsSectionProps) {
         </Button>
       </form>
 
-      {/* News Categories Tabs and Heading */}
-      {/* Changed layout: Heading first, then Tabs, using flex and gap */}
-      <div className="flex items-center gap-4 mb-4">
-        <h2 className="bg-primary text-primary-foreground font-semibold text-lg flex-shrink-0 px-4 py-2 rounded-md flex items-center gap-2">
-          <Newspaper className="h-5 w-5" />
-          أحدث الأخبار
-        </h2>
-        <Tabs defaultValue={selectedCategory} onValueChange={handleTabChange} className="w-auto"> {/* Removed w-full */}
-           {/* Changed grid-cols-3 to grid-flow-col for dynamic width */}
-          <TabsList className="grid grid-flow-col auto-cols-max"> {/* Adjust grid for content size */}
-            <TabsTrigger value="local">محلية</TabsTrigger>
-            <TabsTrigger value="sohag">سوهاج</TabsTrigger> {/* New Sohag Tab */}
-            <TabsTrigger value="governorate">محافظات</TabsTrigger>
-             {/* Removed world tab as per request */}
+      {/* News Categories Section - Styled to match image */}
+      {/* Container with bottom border */}
+      <div className="flex items-center justify-between border-b-2 border-destructive pb-1 mb-4 relative">
+         {/* Tabs on the left */}
+        <Tabs defaultValue={selectedCategory} onValueChange={handleTabChange} className="w-auto">
+          {/* Remove TabsList background and padding */}
+          <TabsList className="bg-transparent p-0 h-auto justify-start gap-4">
+            {/* Style TabsTrigger as red links */}
+            <TabsTrigger
+              value="local"
+              className="text-destructive data-[state=active]:underline data-[state=active]:font-bold data-[state=active]:shadow-none p-0 text-sm"
+            >
+              أخبارنا المحلية
+            </TabsTrigger>
+            <TabsTrigger
+              value="sohag"
+              className="text-destructive data-[state=active]:underline data-[state=active]:font-bold data-[state=active]:shadow-none p-0 text-sm"
+            >
+              أخبار محافظة سوهاج
+            </TabsTrigger>
+            <TabsTrigger
+              value="egypt"
+              className="text-destructive data-[state=active]:underline data-[state=active]:font-bold data-[state=active]:shadow-none p-0 text-sm"
+            >
+              أخبار مصر
+            </TabsTrigger>
+             {/* More Link */}
+            <Link href="#" className="text-destructive text-sm flex items-center hover:underline">
+               المزيد
+               <ChevronLeft className="h-4 w-4 mr-1" /> {/* Use marginRight in RTL */}
+            </Link>
           </TabsList>
         </Tabs>
+
+         {/* Heading on the right - Styled like the image */}
+         {/* Using destructive background and foreground */}
+         {/* Adding padding and a slight skew effect using clip-path (optional, can be simplified) */}
+        <h2 className="bg-destructive text-destructive-foreground font-semibold text-lg flex-shrink-0 px-6 py-2 relative">
+           {/* Optional: Add the angled edge effect */}
+           <div className="absolute inset-y-0 left-0 w-4 bg-destructive transform -skew-x-12 -translate-x-2"></div>
+           <span className="relative z-10">أحدث الأخبار</span>
+           {/* You might need adjustments for perfect shape matching */}
+        </h2>
       </div>
+
 
       {/* Articles Grid - Content is now dynamically updated based on state */}
       {isLoading ? (

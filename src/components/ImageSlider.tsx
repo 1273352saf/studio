@@ -19,7 +19,7 @@ export default function ImageSlider({ images, className }: ImageSliderProps) {
        <ScrollArea className="w-full h-full whitespace-nowrap rounded-md border">
          <div className="flex w-max space-x-4 p-4 h-full">
            {images.map((src, index) => (
-             <figure key={index} className="shrink-0 relative w-64 sm:w-80 md:w-96 h-full"> {/* Use relative, set base width and height */}
+             <figure key={index} className="shrink-0 relative w-full sm:w-80 md:w-96 h-full"> {/* Use relative, make width full by default, adjust responsive widths */}
                <div className="overflow-hidden rounded-md h-full">
                  <Image
                    src={src}
@@ -32,11 +32,10 @@ export default function ImageSlider({ images, className }: ImageSliderProps) {
                    // Add specific hint if it's the provided image, otherwise use generic
                    data-ai-hint={
                      src.includes('wikimedia') ? 'basketball players action' :
-                     src.includes('encrypted-tbn0.gstatic.com') ? 'soccer players action' : // Hint for the new image
-                     'news landscape'
+                     src.includes('encrypted-tbn0.gstatic.com') ? 'soccer players action' :
+                     'news landscape abstract' // Updated generic hint
                    }
-                    // Add unoptimized prop for external domains not explicitly listed in next.config.js or known CDNs
-                   unoptimized={!src.startsWith('/') && !src.includes('picsum.photos') && !src.includes('upload.wikimedia.org')}
+                   // Removed unoptimized prop as picsum.photos is now configured
                  />
                </div>
              </figure>

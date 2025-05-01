@@ -83,7 +83,8 @@ export default function AppSidebar({ className }: AppSidebarProps) {
          {/* Calendar Section */}
          <SidebarGroup className="mt-4">
            <SidebarGroupLabel>التقويم</SidebarGroupLabel>
-           <SidebarGroupContent className={cn(state === 'collapsed' && 'flex justify-center items-center h-full')}>
+           {/* Added w-full when expanded, ensured flexbox settings for collapsed icon */}
+           <SidebarGroupContent className={cn(state === 'collapsed' ? 'flex justify-center items-center h-full' : 'w-full')}>
              {/* Show only icon when collapsed */}
              {state === 'collapsed' ? (
                <Button variant="ghost" size="icon" onClick={toggleSidebar}>
@@ -94,7 +95,8 @@ export default function AppSidebar({ className }: AppSidebarProps) {
                  mode="single"
                  selected={date}
                  onSelect={setDate}
-                 className="rounded-md border w-full" // Ensure calendar fits
+                 // Ensure calendar takes full width of its container
+                 className="rounded-md border w-full"
                  dir="rtl" // Explicitly set direction for calendar
                />
              )}
@@ -119,7 +121,7 @@ export default function AppSidebar({ className }: AppSidebarProps) {
 
       <SidebarFooter className="p-2 text-center text-xs text-muted-foreground">
          {/* Footer content */}
-          {state === 'expanded' && <span>&copy; 2024 الكوله اليوم</span>}
+          {state === 'expanded' && <span>&copy; {new Date().getFullYear()} الكوله اليوم</span>}
       </SidebarFooter>
     </Sidebar>
   );

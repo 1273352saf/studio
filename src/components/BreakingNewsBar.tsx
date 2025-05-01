@@ -18,11 +18,15 @@ export default function BreakingNewsBar({ newsItems, className }: BreakingNewsBa
 
   return (
     <div className={cn(
-      "bg-accent text-accent-foreground p-3 rounded-md shadow flex items-center space-x-3 overflow-hidden",
+      // Changed background to a muted shade for the bar itself
+      "bg-card border border-border text-foreground p-3 rounded-md shadow flex items-center space-x-3 space-x-reverse overflow-hidden", // Added space-x-reverse for RTL
       className
     )}>
-      <AlertCircle className="h-5 w-5 flex-shrink-0 ms-2" /> {/* Use ms-2 for RTL margin */}
-      <span className="font-semibold text-sm flex-shrink-0">أخبار عاجلة:</span>
+       {/* Changed background to red (destructive) and text to white for the label */}
+       <span className="bg-destructive text-destructive-foreground font-semibold text-sm flex-shrink-0 px-3 py-1 rounded-md flex items-center gap-2">
+         <AlertCircle className="h-4 w-4" /> {/* Icon within the red label */}
+         أخبار عاجلة:
+       </span>
       <div className="flex-grow overflow-hidden whitespace-nowrap">
         {/* Apply the marquee animation */}
         <span className="inline-block animate-marquee-rtl px-4">

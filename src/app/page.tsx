@@ -1,3 +1,4 @@
+
 import { Facebook, Twitter, Instagram } from 'lucide-react';
 import { getNewsArticles, type NewsArticle } from '@/services/news';
 import NewsSection from '@/components/NewsSection';
@@ -16,17 +17,21 @@ const LiveStreamPlaceholder = () => (
 );
 
 export default async function Home() {
-  // Fetch initial articles on the server
-  // In a real app, you might pass initial search params here
-  const initialArticles = await getNewsArticles('');
+  // Fetch initial articles for the 'local' category on the server
+  const initialArticles = await getNewsArticles('', 'local'); // Fetch 'local' articles initially
 
-  // Extract potential image URLs for the slider (using placeholders and the new image)
+  // Extract potential image URLs for the slider
   const imageUrls = initialArticles
      .map(article => article.imageUrl)
-     .filter((url): url is string => !!url); // Ensure only defined URLs are included
-
-  // Add the new image URL explicitly if needed (it's already in getNewsArticles)
-  // imageUrls.push('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm1hQ5ZqXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXQ&usqp=CAU');
+     .filter((url): url is string => !!url) // Ensure only defined URLs are included
+     // Add more placeholder images if needed, ensuring diversity
+     .concat([
+         'https://picsum.photos/600/400?random=9',
+         'https://picsum.photos/600/400?random=10',
+         'https://picsum.photos/600/400?random=11',
+      ])
+      // Ensure unique URLs if placeholders might repeat
+     .filter((url, index, self) => self.indexOf(url) === index);
 
 
   const breakingNewsItems = [
@@ -97,7 +102,7 @@ export default async function Home() {
              <div className="flex-1">
                <NewsSection
                  initialArticles={initialArticles}
-                 // Remove props passed directly above, they are handled inside NewsSection now
+                 // No need to pass category prop, handled internally
                />
              </div>
            </div>

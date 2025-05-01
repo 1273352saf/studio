@@ -1,3 +1,4 @@
+
 /**
  * Represents a news article with title, summary and source information.
  */
@@ -22,77 +23,115 @@ export interface NewsArticle {
    * Optional URL for an associated image.
    */
   imageUrl?: string; // Added optional imageUrl
+  /**
+   * Category of the news article.
+   */
+  category?: 'local' | 'governorate' | 'world' | 'general'; // Added category
 }
 
 /**
- * Asynchronously retrieves news articles based on keywords.
+ * Asynchronously retrieves news articles based on keywords and category.
  *
  * @param keywords The keywords to search for in news articles.
+ * @param category Optional category to filter news articles.
  * @returns A promise that resolves to an array of NewsArticle objects.
  */
-export async function getNewsArticles(keywords: string): Promise<NewsArticle[]> {
-  // TODO: Implement this by calling an API.
+export async function getNewsArticles(
+  keywords: string,
+  category?: 'local' | 'governorate' | 'world'
+): Promise<NewsArticle[]> {
+  console.log(`API Call Simulation: Searching for "${keywords}" in category "${category || 'all'}"`);
 
-  // Use the provided image and other placeholders
+  // TODO: Implement this by calling a real API, passing keywords and category.
+
   const providedImageUrl = 'https://upload.wikimedia.org/wikipedia/commons/6/60/JaVale_McGee_Joakim_Noah_2011.jpg';
-  const soccerImageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm1hQ5ZqXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXQ&usqp=CAU'; // New soccer image
+  const soccerImageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm1hQ5ZqXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXfXQ&usqp=CAU';
 
-  return [
+  const allArticles: NewsArticle[] = [
     {
-      title: 'Breaking News: Local Tech Company Announces Major Innovation',
-      summary: 'A local tech company has just announced a groundbreaking innovation that is set to revolutionize the industry. Sources say the new technology could double processing speeds.',
-      source: 'Local News Source',
-      url: 'https://example.com/article1',
-      imageUrl: providedImageUrl // Use the provided image
+      title: 'خبر محلي: افتتاح حديقة جديدة في المدينة',
+      summary: 'تم افتتاح حديقة عامة جديدة اليوم بحضور عدد من المسؤولين، وتضم الحديقة مساحات خضراء ومرافق ترفيهية.',
+      source: 'جريدة المدينة',
+      url: 'https://example.com/local1',
+      imageUrl: 'https://picsum.photos/600/400?random=1',
+      category: 'local'
     },
     {
-      title: 'Global Market Trends Show Significant Growth in Renewable Energy Sector',
-      summary: 'The renewable energy sector is experiencing significant growth worldwide, driven by increasing environmental concerns and technological advancements in solar and wind power.',
-      source: 'Global News Network',
-      url: 'https://example.com/article2',
-      imageUrl: 'https://picsum.photos/600/400?random=2' // Use a different aspect ratio if needed
+      title: 'عالمي: اتفاق تجاري جديد بين دولتين',
+      summary: 'تم توقيع اتفاقية تجارية هامة بين دولتين تهدف إلى تعزيز التبادل التجاري والاقتصادي بينهما.',
+      source: 'شبكة الأخبار العالمية',
+      url: 'https://example.com/world1',
+      imageUrl: 'https://picsum.photos/600/400?random=2',
+      category: 'world'
+    },
+    {
+      title: 'محافظات: تطوير البنية التحتية في محافظة XYZ',
+      summary: 'أعلنت السلطات المحلية عن خطة شاملة لتطوير الطرق والمرافق الخدمية في محافظة XYZ خلال العام القادم.',
+      source: 'أخبار المحافظات',
+      url: 'https://example.com/gov1',
+      imageUrl: soccerImageUrl,
+      category: 'governorate'
     },
      {
-      title: 'Advancements in AI Lead to New Medical Breakthroughs',
-      summary: 'Researchers utilize artificial intelligence to identify potential new treatments for rare diseases, speeding up the drug discovery process significantly.',
-      source: 'Science Today',
-      url: 'https://example.com/article3',
-      imageUrl: 'https://picsum.photos/600/400?random=3'
+      title: 'محلي: شركة تقنية محلية تعلن عن ابتكار جديد',
+      summary: 'شركة تكنولوجيا محلية تكشف عن ابتكار ثوري قد يغير صناعة الاتصالات.',
+      source: 'أخبار التكنولوجيا المحلية',
+      url: 'https://example.com/local2',
+      imageUrl: providedImageUrl,
+      category: 'local'
     },
      {
-      title: 'City Council Approves Plan for New Downtown Park',
-      summary: 'The city council voted unanimously to approve the construction of a new public park in the downtown area, featuring green spaces and recreational facilities.',
-      source: 'City Gazette',
-      url: 'https://example.com/article4',
-      imageUrl: soccerImageUrl // Use the soccer image
-    },
-     {
-      title: 'Stock Market Hits Record High Amidst Economic Optimism',
-      summary: 'Major stock indices reached new all-time highs today as investors show confidence in the economic recovery following positive job reports.',
-      source: 'Financial Times',
-      url: 'https://example.com/article5',
-       imageUrl: 'https://picsum.photos/600/400?random=5'
+      title: 'عالمي: مؤتمر المناخ يختتم أعماله باتفاق تاريخي',
+      summary: 'اختتم مؤتمر المناخ العالمي أعماله باتفاق يهدف إلى خفض الانبعاثات الكربونية بشكل كبير.',
+      source: 'وكالة الأنباء الدولية',
+      url: 'https://example.com/world2',
+       imageUrl: 'https://picsum.photos/600/400?random=5',
+       category: 'world'
     },
     {
-      title: 'New Space Mission Launched Successfully',
-      summary: 'The national space agency confirmed the successful launch of its latest mission aimed at exploring Mars\' atmosphere. The probe is expected to reach the red planet in 9 months.',
-      source: 'Space Agency Press',
-      url: 'https://example.com/article6',
-      imageUrl: providedImageUrl // Use the provided image again
+      title: 'محافظات: افتتاح مستشفى جديد في محافظة ABC',
+      summary: 'تم افتتاح مستشفى حديث في محافظة ABC مزود بأحدث التقنيات الطبية لخدمة أهالي المنطقة.',
+      source: 'صوت المحافظات',
+      url: 'https://example.com/gov2',
+      imageUrl: 'https://picsum.photos/600/400?random=6',
+      category: 'governorate'
     },
     {
-      title: 'International Film Festival Announces Award Winners',
-      summary: 'The prestigious international film festival concluded last night, announcing the winners across various categories. The top prize went to a compelling drama from an independent filmmaker.',
-      source: 'Entertainment Weekly',
-      url: 'https://example.com/article7',
-      imageUrl: 'https://picsum.photos/600/400?random=7'
+      title: 'محلي: فعالية ثقافية تجذب الجمهور في وسط المدينة',
+      summary: 'نُظمت فعالية ثقافية متنوعة في ساحة وسط المدينة شهدت إقبالاً كبيراً من الجمهور.',
+      source: 'أصداء المدينة',
+      url: 'https://example.com/local3',
+      imageUrl: 'https://picsum.photos/600/400?random=7',
+      category: 'local'
     },
     {
-        title: 'Culinary World Celebrates New Michelin Star Restaurants',
-        summary: 'The annual Michelin Guide release has honored several new restaurants with coveted stars, highlighting innovation and excellence in gastronomy.',
-        source: 'Food & Wine Magazine',
-        url: 'https://example.com/article8',
-        imageUrl: soccerImageUrl // Use the soccer image again
+        title: 'عالمي: اكتشاف أثري جديد يغير فهم التاريخ',
+        summary: 'فريق من علماء الآثار يعلن عن اكتشاف موقع أثري قد يعيد كتابة جزء من تاريخ الحضارات القديمة.',
+        source: 'مجلة العلوم والتاريخ',
+        url: 'https://example.com/world3',
+        imageUrl: 'https://picsum.photos/600/400?random=8',
+        category: 'world'
     }
   ];
+
+  // Simulate filtering based on category and keywords
+  let filteredArticles = allArticles;
+
+  if (category) {
+    filteredArticles = filteredArticles.filter(article => article.category === category);
+  }
+
+  if (keywords) {
+    const lowerKeywords = keywords.toLowerCase();
+    filteredArticles = filteredArticles.filter(article =>
+      article.title.toLowerCase().includes(lowerKeywords) ||
+      article.summary.toLowerCase().includes(lowerKeywords) ||
+      article.source.toLowerCase().includes(lowerKeywords)
+    );
+  }
+
+  // Simulate API delay
+  await new Promise(resolve => setTimeout(resolve, 300));
+
+  return filteredArticles;
 }

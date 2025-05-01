@@ -91,13 +91,14 @@ export default function AppSidebar({ className }: AppSidebarProps) {
                   : 'opacity-100' // Visible when expanded
               )}>
                {/* Calendar container ensures it takes width, only visible when expanded */}
+               {/* Removed w-full from calendar to allow natural sizing */}
                <div className={cn(state === 'expanded' ? 'block' : 'hidden')}>
                  <ShadCalendar
                    mode="single"
                    selected={date}
                    onSelect={setDate}
-                   // Ensure calendar takes full width of its container and adds padding
-                   className="rounded-md border w-full p-0" // p-0 to avoid double padding with internal DayPicker padding
+                   // Ensure calendar adds padding internally, but container controls width
+                   className="rounded-md border p-0" // p-0 to avoid double padding with internal DayPicker padding
                    dir="rtl" // Explicitly set direction for calendar
                  />
                </div>

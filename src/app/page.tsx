@@ -102,7 +102,8 @@ export default async function Home() {
          </main>
        </div>
         {/* Enhanced Footer */}
-        <footer className="bg-card border-t mt-auto py-6 px-4 sm:px-6">
+        {/* Changed footer background to bg-background */}
+        <footer className="bg-background border-t mt-auto py-6 px-4 sm:px-6">
            <div className="container mx-auto flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
              <div className="mb-4 md:mb-0">
                &copy; {new Date().getFullYear()} الكوله اليوم. جميع الحقوق محفوظة.

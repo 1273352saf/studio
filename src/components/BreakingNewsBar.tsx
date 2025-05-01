@@ -18,8 +18,8 @@ export default function BreakingNewsBar({ newsItems, className }: BreakingNewsBa
 
   return (
     <div className={cn(
-      // Changed background to muted for the bar itself
-      "bg-muted border border-border text-foreground p-3 rounded-md shadow flex items-center space-x-3 space-x-reverse overflow-hidden", // Added space-x-reverse for RTL
+      // Changed background to card for the bar itself
+      "bg-card border border-border text-foreground p-3 rounded-md shadow flex items-center space-x-3 space-x-reverse overflow-hidden", // Added space-x-reverse for RTL
       className
     )}>
        {/* Changed background to red (destructive) and text to white for the label */}

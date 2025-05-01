@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"; // Import Dropdown components
 import { Button } from './ui/button'; // Import Button for Dropdown trigger
+import { usePathname } from 'next/navigation'; // Import usePathname
 
 interface NavbarProps {
   className?: string;
@@ -18,10 +19,10 @@ interface NavbarProps {
 
 const navItems = [
   { href: '/', label: 'الرئيسية', icon: Home },
-  { href: '/archive', label: 'اخبار ارشيفيه', icon: Newspaper },
-  { href: '/about', label: 'من نحن', icon: Info },
-  { href: '/contact', label: 'اتصل بنا', icon: Mail },
-  { href: '/incidents', label: 'اخبار الحوادث', icon: AlertTriangle },
+  { href: '/archive', label: 'اخبار ارشيفيه', icon: Newspaper }, // Corrected path
+  { href: '/about', label: 'من نحن', icon: Info }, // Corrected path
+  { href: '/contact', label: 'اتصل بنا', icon: Mail }, // Corrected path
+  { href: '/incidents', label: 'اخبار الحوادث', icon: AlertTriangle }, // Corrected path
   // Placeholder for "More" dropdown
 ];
 
@@ -33,6 +34,8 @@ const moreItems = [
 ];
 
 export default function Navbar({ className }: NavbarProps) {
+  const pathname = usePathname(); // Get current path
+
   return (
     <nav
       className={cn(
@@ -47,22 +50,24 @@ export default function Navbar({ className }: NavbarProps) {
       {/* Reverted spacing to space-x-4 */}
       <div className="flex justify-start items-center space-x-4 space-x-reverse">
         {/* Render main navigation items */}
-        {navItems.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className={cn(
-              // Reverted padding to px-3 py-1.5
-              'flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
-              // Add active state styling if needed (e.g., based on current path)
-              // Example active style: 'bg-destructive text-destructive-foreground'
-              href === '/' ? 'bg-destructive text-destructive-foreground' : 'hover:bg-primary/80 dark:hover:bg-gray-700' // Highlight "الرئيسية"
-            )}
-          >
-             <Icon className="h-4 w-4 ml-1" /> {/* Keep reduced margin */}
-             {label}
-          </Link>
-        ))}
+        {navItems.map(({ href, label, icon: Icon }) => {
+           const isActive = pathname === href; // Check if the current path matches the link href
+           return (
+             <Link
+               key={href}
+               href={href}
+               className={cn(
+                 // Reverted padding to px-3 py-1.5
+                 'flex items-center px-3 py-1.5 rounded-md text-sm font-medium transition-colors',
+                 // Apply active state styling based on isActive
+                 isActive ? 'bg-destructive text-destructive-foreground' : 'hover:bg-primary/80 dark:hover:bg-gray-700'
+               )}
+             >
+                <Icon className="h-4 w-4 ml-1" /> {/* Keep reduced margin */}
+                {label}
+             </Link>
+           );
+        })}
 
         {/* More Dropdown Menu */}
         <DropdownMenu dir="rtl"> {/* Set direction for dropdown */}
@@ -70,7 +75,11 @@ export default function Navbar({ className }: NavbarProps) {
                 <Button
                    variant="ghost" // Make trigger look like other nav items
                    // Reverted padding to px-3 py-1.5
-                   className="flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-primary-foreground dark:text-gray-100 hover:bg-primary/80 dark:hover:bg-gray-700"
+                   className={cn(
+                      "flex items-center px-3 py-1.5 rounded-md text-sm font-medium text-primary-foreground dark:text-gray-100 hover:bg-primary/80 dark:hover:bg-gray-700",
+                       // Check if any 'moreItems' link is active
+                      moreItems.some(item => pathname === item.href) && 'bg-destructive text-destructive-foreground'
+                    )}
                 >
                     <MoreHorizontal className="h-4 w-4 ml-1" /> {/* More icon */}
                     المزيد
@@ -78,13 +87,22 @@ export default function Navbar({ className }: NavbarProps) {
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-48 bg-popover text-popover-foreground"> {/* Style dropdown content */}
-                {moreItems.map((item) => (
+                {moreItems.map((item) => {
+                  const isMoreActive = pathname === item.href;
+                  return (
                     <DropdownMenuItem key={item.href} asChild>
-                        <Link href={item.href} className="flex justify-between items-center w-full cursor-pointer">
+                        <Link
+                           href={item.href}
+                           className={cn(
+                              "flex justify-between items-center w-full cursor-pointer",
+                              isMoreActive && "bg-accent text-accent-foreground" // Style active item in dropdown
+                           )}
+                        >
                             {item.label}
                         </Link>
                     </DropdownMenuItem>
-                ))}
+                  )
+                })}
             </DropdownMenuContent>
         </DropdownMenu>
       </div>

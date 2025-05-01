@@ -18,25 +18,30 @@ export default function BreakingNewsBar({ newsItems, className }: BreakingNewsBa
 
   return (
     <div className={cn(
-      // Changed background to card for the bar itself
-      "bg-card border border-border text-foreground p-3 rounded-md shadow flex items-center space-x-3 space-x-reverse overflow-hidden", // Added space-x-reverse for RTL
+      // Use card background for the main bar, remove border for cleaner look like image
+      "bg-card text-foreground p-2 rounded-md shadow flex items-center overflow-hidden", // Reduced padding p-2
       className
     )}>
-       {/* Changed background to red (destructive) and text to white for the label */}
-       <span className="bg-destructive text-destructive-foreground font-semibold text-sm flex-shrink-0 px-3 py-1 rounded-md flex items-center gap-2">
-         <AlertCircle className="h-4 w-4" /> {/* Icon within the red label */}
-         أخبار عاجلة:
-       </span>
+       {/* Marquee Text Area - Takes up remaining space on the left */}
       <div className="flex-grow overflow-hidden whitespace-nowrap">
         {/* Apply the marquee animation */}
-        <span className="inline-block animate-marquee-rtl px-4">
+        {/* Add padding-right to separate from the label */}
+        <span className="inline-block animate-marquee-rtl pr-4"> {/* Use padding-right in RTL */}
           {combinedNews}
         </span>
         {/* Duplicate the content for seamless looping */}
-         <span className="inline-block animate-marquee-rtl px-4" aria-hidden="true">
+         <span className="inline-block animate-marquee-rtl pr-4" aria-hidden="true"> {/* Use padding-right in RTL */}
            {combinedNews}
          </span>
       </div>
+
+      {/* Label on the right */}
+       {/* Using destructive background (red) and foreground (white) */}
+       {/* Removed icon, adjusted padding */}
+       <span className="bg-destructive text-destructive-foreground font-semibold text-sm flex-shrink-0 px-4 py-1 rounded-sm"> {/* Use rounded-sm for sharper corners */}
+         عاجل
+       </span>
+
     </div>
   );
 }

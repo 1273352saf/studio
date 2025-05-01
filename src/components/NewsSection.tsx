@@ -26,13 +26,13 @@ export default function NewsSection({ initialArticles, imageUrls, breakingNewsIt
       <BreakingNewsBar newsItems={breakingNewsItems} />
 
       {/* Image Slider and Live Stream Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch"> {/* Use grid and items-stretch */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch h-80"> {/* Use grid, items-stretch and set a fixed height */}
         <div className="lg:col-span-2 h-full"> {/* Slider takes 2/3 width on large screens */}
-          <ImageSlider images={imageUrls} className="h-64 lg:h-full" /> {/* Add specific height */}
+          <ImageSlider images={imageUrls} className="h-full" /> {/* Ensure slider takes full height */}
         </div>
         <div className="lg:col-span-1 h-full"> {/* Live stream takes 1/3 width, ensure full height */}
            {/* Placeholder for live stream */}
-           <Card className="h-full flex flex-col items-center justify-center bg-muted text-muted-foreground p-4 min-h-[200px] lg:min-h-[200px]"> {/* Ensure min-height */}
+           <Card className="h-full flex flex-col items-center justify-center bg-muted text-muted-foreground p-4"> {/* Ensure Card takes full height */}
              <Video className="h-12 w-12 mx-auto mb-2 text-foreground" />
              <p className="font-semibold">مساحة البث المباشر</p>
              <p className="text-sm text-center mt-1">سيتم إضافة البث المباشر هنا قريبًا.</p>

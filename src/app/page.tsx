@@ -20,7 +20,8 @@ export default async function Home() {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    // Remove container class to allow sidebar integration, apply padding within NewsSection or page content
+    <div className="px-4 py-8">
       {/* New Header */}
       <header className="flex justify-between items-center mb-8 pb-4 border-b">
         {/* Right Side: Title and Subtitle */}
